@@ -7,8 +7,8 @@ import Frame from './phone-frame';
 function App() {
   return (
     <div className="App">
-      {/* <Register /> */}
-      {/* <Login /> */}
+      <Register />
+      <Login />
       <Frame />
     </div>
   );

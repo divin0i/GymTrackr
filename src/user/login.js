@@ -11,7 +11,9 @@ function Login() {
           <div className='phone-bar'>
             <h1 className='top_bar'></h1>
           </div>
-          <img src={logo} alt='GymTrakr Logo' className='logo' />
+          <a href='/' className='logo-link'>
+            <img src={logo} alt='GymTrakr Logo' className='logo' />
+          </a>
         </div>
         <form className='login-form'>
             <h2>Welcome Back ! Glad to see you, again !</h2>

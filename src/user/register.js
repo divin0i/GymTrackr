@@ -59,7 +59,9 @@ function Register() {
           <div className='phone-bar'>
             <h1 className='top_bar'></h1>
           </div>
-          <img src={logo} alt='GymTrakr Logo' className='logo' />
+          <a href='/' className='logo-link'>
+            <img src={logo} alt='GymTrakr Logo' className='logo' />
+          </a>
         </div>
 
         <h2>Hello! Register to get started</h2>
