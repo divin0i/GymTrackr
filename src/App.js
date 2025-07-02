@@ -11,6 +11,7 @@ function App() {
       {/* <Register /> */}
       {/* <Login /> */}
       <Workout />
+      <a href="/admin">Access Admin Panel</a>
     </div>
   );
 }
