@@ -15,3 +15,5 @@
   }
 //   adjustedMET = baseMET * multiplier[intensity];
 // calories = ((adjustedMET × weightKg × 3.5) / 200) × duration;
+men : BMR=10×weight (kg)+6.25×height (cm)−5×age (years)+5
+women : BMR=10×weight (kg)+6.25×height (cm)−5×age (years)−161
