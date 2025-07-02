@@ -8,8 +8,7 @@
       "duration": 10,
       "met": 11.0,
       "description": "High-intensity cardio that improves coordination and burns calories quickly.",
-      "videoUrl": "https://example.com/videos/jump-rope",
-      "imageUrl": "https://example.com/images/jump-rope.jpg"
+      "videoUrl": "https://youtu.be/DTdaiqR9now?si=UQ-aOx9D7XYGHhBH"
     },
     {
       "name": "High Knees",
@@ -20,8 +19,7 @@
       "duration": 5,
       "met": 8.0,
       "description": "Quick running in place while lifting knees high for heart rate boost.",
-      "videoUrl": "https://example.com/videos/high-knees",
-      "imageUrl": "https://example.com/images/high-knees.jpg"
+      "videoUrl": "https://youtu.be/DfjpR6dzLVg?si=-Itaukrv57Ypwu8h"
     },
     {
       "name": "Burpees",
@@ -32,8 +30,7 @@
       "duration": 5,
       "met": 8.5,
       "description": "Explosive full-body movement combining squat, push-up, and jump.",
-      "videoUrl": "https://example.com/videos/burpees",
-      "imageUrl": "https://example.com/images/burpees.jpg"
+      "videoUrl": "https://youtu.be/JhLlu2FMueo?si=pry92qKKzTYPKmHr"
     },
     {
       "name": "Mountain Climbers",
@@ -44,8 +41,7 @@
       "duration": 5,
       "met": 8.0,
       "description": "Cardio core move performed from a plank position with alternating leg drives.",
-      "videoUrl": "https://example.com/videos/mountain-climbers",
-      "imageUrl": "https://example.com/images/mountain-climbers.jpg"
+      "videoUrl": "https://youtu.be/hq_0YlyfqGM?si=mWuqwnp3WVCXD83s"
     },
     {
       "name": "Shadow Boxing",
@@ -56,8 +52,7 @@
       "duration": 10,
       "met": 6.0,
       "description": "Cardio boxing performed without a bag for technique, coordination, and endurance.",
-      "videoUrl": "https://example.com/videos/shadow-boxing",
-      "imageUrl": "https://example.com/images/shadow-boxing.jpg"
+      "videoUrl": "https://youtu.be/br8VDXWr0_8?si=7kijBX-NZjltZkpr"
     },
     {
       "name": "Bench Press",
@@ -71,8 +66,7 @@
       "weight": 80,
       "met": 5.0,
       "description": "Upper-body strength movement focused on the chest and arms.",
-      "videoUrl": "https://example.com/videos/bench-press",
-      "imageUrl": "https://example.com/images/bench-press.jpg"
+      "videoUrl": "https://youtu.be/gRVjAtPip0Y?si=HnrzgGP93244A1WX"
     },
     {
       "name": "Push-Up",
@@ -86,11 +80,10 @@
       "weight": "bodyweight",
       "met": 3.8,
       "description": "Classic bodyweight movement working the upper body and core.",
-      "videoUrl": "https://example.com/videos/push-up",
-      "imageUrl": "https://example.com/images/push-up.jpg"
+      "videoUrl": "https://youtu.be/IODxDxX7oi4?si=L4K7imyqdDJSUQFW"
     },
     {
-      "name": "Barbell Squat",
+      "name": "Dumbell Squat",
       "type": "strength",
       "muscleGroup": ["legs", "glutes"],
       "equipment": "barbell",
@@ -101,8 +94,7 @@
       "weight": 100,
       "met": 5.5,
       "description": "Lower-body compound movement for building leg and glute strength.",
-      "videoUrl": "https://example.com/videos/barbell-squat",
-      "imageUrl": "https://example.com/images/barbell-squat.jpg"
+      "videoUrl": "https://youtu.be/vBA3vyOxJv0?si=E3i13QWLHHTJzlQP"
     },
     {
       "name": "Dumbbell Lunge",
@@ -116,8 +108,7 @@
       "weight": 15,
       "met": 4.5,
       "description": "Step-forward movement with dumbbells to target glutes and hamstrings.",
-      "videoUrl": "https://example.com/videos/lunge",
-      "imageUrl": "https://example.com/images/lunge.jpg"
+      "videoUrl": "https://youtu.be/9gglI77Kzq8?si=-ECosHIl2KGwEYTE"
     },
     {
       "name": "Shoulder Press",
@@ -131,8 +122,7 @@
       "weight": 20,
       "met": 4.5,
       "description": "Overhead pressing movement that builds shoulder and arm strength.",
-      "videoUrl": "https://example.com/videos/shoulder-press",
-      "imageUrl": "https://example.com/images/shoulder-press.jpg"
+      "videoUrl": "https://youtu.be/9gglI77Kzq8?si=-ECosHIl2KGwEYTE"
     },
     {
       "name": "Tricep Dips",
@@ -146,8 +136,7 @@
       "weight": "bodyweight",
       "met": 4.0,
       "description": "Bodyweight dip movement targeting the triceps and chest.",
-      "videoUrl": "https://example.com/videos/tricep-dips",
-      "imageUrl": "https://example.com/images/tricep-dips.jpg"
+      "videoUrl": "https://youtube.com/shorts/9llvBAV4RHI?si=8EDHdOZSbv9lwTsO"
     },
     {
       "name": "Bicep Curl",
@@ -161,8 +150,7 @@
       "weight": 12,
       "met": 3.8,
       "description": "Isolated arm exercise focused on building biceps strength.",
-      "videoUrl": "https://example.com/videos/bicep-curl",
-      "imageUrl": "https://example.com/images/bicep-curl.jpg"
+      "videoUrl": "https://youtu.be/HnHuhf4hEWY?si=uDvXkq6FuzYxhg_h"
     },
     {
       "name": "Plank",
@@ -176,8 +164,7 @@
       "weight": "bodyweight",
       "met": 3.3,
       "description": "Isometric core hold that strengthens the abs, back, and stabilizers.",
-      "videoUrl": "https://example.com/videos/plank",
-      "imageUrl": "https://example.com/images/plank.jpg"
+      "videoUrl": "https://youtu.be/pvIjsG5Svck?si=-g0G6wD8jFTlpHzv"
     },
     {
       "name": "Crunches",
@@ -191,22 +178,83 @@
       "weight": "bodyweight",
       "met": 3.5,
       "description": "Core-strengthening move targeting the upper abdominal region.",
-      "videoUrl": "https://example.com/videos/crunches",
-      "imageUrl": "https://example.com/images/crunches.jpg"
+      "videoUrl": "https://youtu.be/eJ19kXHQQsI?si=eJf693QfCPOKEP31"
     },
+    // {
+    //   "name": "Dead Bug",
+    //   "type": "strength",
+    //   "muscleGroup": ["core"],
+    //   "equipment": "bodyweight",
+    //   "difficulty": "easy",
+    //   "duration": 4,
+    //   "reps": 10,
+    //   "sets": 3,
+    //   "weight": "bodyweight",
+    //   "met": 3.0,
+    //   "description": "Controlled core movement for abs and deep stabilizers.",
+    //   "videoUrl": "https://example.com/videos/dead-bug"
+    // },
+
     {
-      "name": "Dead Bug",
-      "type": "strength",
-      "muscleGroup": ["core"],
-      "equipment": "bodyweight",
-      "difficulty": "easy",
-      "duration": 4,
-      "reps": 10,
-      "sets": 3,
-      "weight": "bodyweight",
-      "met": 3.0,
-      "description": "Controlled core movement for abs and deep stabilizers.",
-      "videoUrl": "https://example.com/videos/dead-bug",
-      "imageUrl": "https://example.com/images/dead-bug.jpg"
-    }
+        "name": "Superman Exercise",
+        "type": "strength",
+        "muscleGroup": ["lower back", "glutes"],
+        "equipment": "bodyweight",
+        "difficulty": "easy",
+        "duration": 5,
+        "reps": 12,
+        "sets": 3,
+        "weight": "bodyweight",
+        "met": 3.5,
+        "description": "Bodyweight exercise that strengthens the erector spinae and glutes by raising arms and legs off the ground.",
+        "videoUrl": "https://youtu.be/NuNO1gTB98g?si=k23HmGS6eynmioUX"
+      },
+
+      {
+        "name": "Running (6 mph)",
+        "type": "cardio",
+        "muscleGroup": ["legs"],
+        "equipment": "none",
+        "difficulty": "medium",
+        "duration": 30,
+        "met": 9.8,
+        "description": "Outdoor running at a moderate pace (~10 min/mile) for heart health and endurance.",
+        "videoUrl": "https://youtu.be/kVnyY17VS9Y?si=r_60BHd1FQPXOALu"
+      },
+
+      {
+        "name": "Bench Press",
+        "type": "strength",
+        "muscleGroup": ["chest", "triceps"],
+        "equipment": "barbell",
+        "difficulty": "medium",
+        "duration": 6,
+        "reps": 8,
+        "sets": 4,
+        "weight": 80,
+        "met": 5.0,
+        "description": "Upper-body strength movement focused on the chest and arms.",
+        "videoUrl": "https://youtu.be/SCVCLChPQFY?si=lrLxzuIIMu3nxUTY"
+      },
+
+      {
+        "name": "Seated Cable Row",
+        "type": "strength",
+        "muscleGroup": ["back", "biceps"],
+        "equipment": "machine",
+        "difficulty": "medium",
+        "duration": 6,
+        "reps": 10,
+        "sets": 4,
+        "weight": 60,
+        "met": 4.5,
+        "description": "Back and arm strength exercise performed by pulling a cable handle toward the torso.",
+        "videoUrl": "https://youtu.be/lJoozxC0Rns?si=pmjENy6aqnjxaF3V"
+      }
 ]
+
+
+
+//https://youtu.be/B2Bi9Xr6d2A?si=E1QDuKrdXm5C-3p8 jumping jacks
+
+//https://youtu.be/I9m4fz4zB8I?si=SID_vcGXVtHCgCKi sit ups
