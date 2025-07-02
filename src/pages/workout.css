@@ -45,7 +45,7 @@
 }
 
 .top_bar {
-   display: flex;
+  display: flex;
   justify-content: baseline;
   width: 50px;
   height: 8px;
@@ -53,7 +53,49 @@
   margin-left: 50%;
   border-radius: 8px;
   background: linear-gradient(to right, #ffffff, #0056b3);
+}
 
+.workout-sessions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.workout-sessions-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: #084183;
+  cursor: pointer;
+}
+
+.workout-sessions-title:hover {
+  background-color: #017cff6f;
+}
+
+.sess-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.expandable-section {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: #ffffff;
+  color: #084183;
+  padding: 0 10px;
+}
+
+.expandable-section.active {
+  max-height: 300px; /* Adjust based on content */
+  padding: 10px;
 }
 
 .workout-content {
@@ -61,10 +103,10 @@
   color: #ffffff;
   padding: 10px;
   text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .workout-content h2 {
@@ -74,10 +116,10 @@
 }
 
 .workout-section {
-    width:  50%;
+  width: 50%;
   display: flex;
   text-align: center;
-    flex-direction: column;
+  flex-direction: column;
   align-items: center;
   border-radius: 10px;
   color: white;
@@ -88,7 +130,7 @@
 
 .workout-section:hover {
   background-color: #017cff6f;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .workout-section p {

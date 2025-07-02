@@ -9,6 +9,27 @@ import Register from './user/register';
 import Workout from './pages/workout';
 import ExerciseList from './pages/exerciseList';
 import Admin from './pages/admin';
+import { auth } from './firebase/db';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
+const ProtectedRoute = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        navigate('/login');
+      }
+    });
+    return unsubscribe;
+  }, [navigate]);
+
+  return isAuthenticated ? children : null;
+};
 
 const router = createBrowserRouter([
   {
@@ -25,28 +46,52 @@ const router = createBrowserRouter([
   },
   {
     path: "/workout",
-    element: <Workout />
+    element: (
+      <ProtectedRoute>
+        <Workout />
+      </ProtectedRoute>
+    )
   },
   {
     path: "/cardio-exercise",
-    element: <ExerciseList type="Cardio" />
+    element: (
+      <ProtectedRoute>
+        <ExerciseList type="Cardio" />
+      </ProtectedRoute>
+    )
   },
   {
     path: "/chest-exercise",
-    element: <ExerciseList type="Chest" />
+    element: (
+      <ProtectedRoute>
+        <ExerciseList type="Chest" />
+      </ProtectedRoute>
+    )
   },
   {
     path: "/abs-exercise",
-    element: <ExerciseList type="Abs" />
+    element: (
+      <ProtectedRoute>
+        <ExerciseList type="Abs" />
+      </ProtectedRoute>
+    )
   },
   {
     path: "/arms-exercise",
-    element: <ExerciseList type="Arms" />
-   },
-   {
+    element: (
+      <ProtectedRoute>
+        <ExerciseList type="Arms" />
+      </ProtectedRoute>
+    )
+  },
+  {
     path: "/admin",
-    element: <Admin />
-   }
+    element: (
+      <ProtectedRoute>
+        <Admin />
+      </ProtectedRoute>
+    )
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
