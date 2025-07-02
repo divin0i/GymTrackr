@@ -78,3 +78,21 @@ a {
   font-size: 12px;
   font-weight:  lighter;
 }
+
+.message {
+  color: #ffffff;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.message.default {
+  color: #ffffff;
+}
+
+.message.error {
+  color: #ff4d4d;
+}
+
+.message.success {
+  color: #4caf50;
+}

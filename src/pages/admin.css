@@ -1,0 +1,77 @@
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #084183;
+  padding: 20px;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+.admin-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.json-editor {
+  width: 80%;
+  height: 400px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #084183;
+  font-family: monospace;
+  resize: vertical;
+}
+
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.button-group button,
+.button-group input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-group button {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.button-group button:hover {
+  background-color: #0056b3;
+}
+
+.button-group input {
+  background-color: #ffffff;
+  color: #084183;
+}
+
+.exercise-list {
+  width: 80%;
+  margin-top: 20px;
+}
+
+.exercise-item {
+  background-color: #ffffff;
+  color: #084183;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-item h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.exercise-item p {
+  margin: 0 0 10px;
+  font-size: 14px;
+}

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './register.css';
-import { db } from '../firebase/db';
+import { db, auth } from '../firebase/db';
 import { collection, addDoc } from 'firebase/firestore';
-import bcrypt from 'bcryptjs';
-import { ChevronLeft, ChevronRight } from 'react-feather';
-import logo from '../Assets/logo.png'; // Adjust the path as necessary
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -13,7 +11,19 @@ function Register() {
     password: '',
     confirmPassword: ''
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ text: '', type: 'default' });
+
+  useEffect(() => {
+    if (formData.password.length >= 6 && formData.password === formData.confirmPassword && formData.password !== '') {
+      setMessage({ text: 'Password is valid', type: 'success' });
+    } else if (formData.password.length > 0 && formData.password.length < 6) {
+      setMessage({ text: 'Password should be at least 6 characters', type: 'error' });
+    } else if (formData.password !== formData.confirmPassword && formData.confirmPassword !== '') {
+      setMessage({ text: 'Passwords do not match', type: 'error' });
+    } else {
+      setMessage({ text: '', type: 'default' });
+    }
+  }, [formData.password, formData.confirmPassword]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,23 +32,27 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-
+    if (formData.password.length < 6) {
+      setMessage({ text: 'Password should be at least 6 characters', type: 'error' });
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
-      setMessage('Passwords do not match!');
+      setMessage({ text: 'Passwords do not match', type: 'error' });
       return;
     }
 
     try {
-      // Store user data in Firestore in the 'users'
-        const userRef = collection(db, 'users');
-        await addDoc(userRef, {
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
+
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
         username: formData.username,
         email: formData.email,
-        password: await bcrypt.hash(formData.password, 10)
-        });
+        createdAt: new Date(),
+      });
 
-      setMessage('Registration successful!');
+      setMessage({ text: 'Registration successful!', type: 'success' });
       setFormData({
         username: '',
         email: '',
@@ -46,24 +60,13 @@ function Register() {
         confirmPassword: ''
       });
     } catch (error) {
-      console.error('Firestore Error:', error.code, error.message);
-      setMessage(`Error: ${error.code} - ${error.message}`);
+      setMessage({ text: `Error: ${error.code} - ${error.message}`, type: 'error' });
     }
   };
 
   return (
     <div className='register-page'>
       <form className='register-form' onSubmit={handleSubmit}>
-        <div className='phone-bar'>
-          <ChevronLeft className='chevron-icon' />
-          <div className='phone-bar'>
-            <h1 className='top_bar'></h1>
-          </div>
-          <a href='/' className='logo-link'>
-            <img src={logo} alt='GymTrakr Logo' className='logo' />
-          </a>
-        </div>
-
         <h2>Hello! Register to get started</h2>
         <div className='form-group'>
           <input
@@ -110,10 +113,10 @@ function Register() {
           />
         </div>
         <button type='submit'>Register</button>
-        {message && <p className='message'>{message}</p>}
         <p className='message'>
           Already have an account? <a href='/login'>Login</a>
         </p>
+        <p className={`message ${message.type}`}>{message.text}</p>
       </form>
       <div className='phone-bar'>
         <h1 className='tab_bar'></h1>
