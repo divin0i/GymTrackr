@@ -1,0 +1,16 @@
+{
+    "name": "Tricep Dips",
+    "type": "strength",
+    "muscleGroup": ["triceps", "chest"],
+    "equipment": "bench",
+    "difficulty": "medium",
+    "duration": 5,
+    "reps": 12,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 4.0,
+    "description": "Bodyweight dip movement targeting the triceps and chest.",
+    "videoUrl": "https://example.com/videos/tricep-dips",
+    "imageUrl": "https://example.com/images/tricep-dips.jpg"
+  }
+  

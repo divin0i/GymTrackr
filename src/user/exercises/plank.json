@@ -1,0 +1,16 @@
+{
+    "name": "Plank",
+    "type": "strength",
+    "muscleGroup": ["core"],
+    "equipment": "bodyweight",
+    "difficulty": "medium",
+    "duration": 3,
+    "reps": 1,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 3.3,
+    "description": "Isometric core hold that strengthens the abs, back, and stabilizers.",
+    "videoUrl": "https://example.com/videos/plank",
+    "imageUrl": "https://example.com/images/plank.jpg"
+  }
+  

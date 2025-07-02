@@ -1,0 +1,16 @@
+{
+    "name": "Push-Up",
+    "type": "strength",
+    "muscleGroup": ["chest", "triceps", "core"],
+    "equipment": "bodyweight",
+    "difficulty": "easy",
+    "duration": 5,
+    "reps": 12,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 3.8,
+    "description": "Classic bodyweight movement working the upper body and core.",
+    "videoUrl": "https://example.com/videos/push-up",
+    "imageUrl": "https://example.com/images/push-up.jpg"
+  }
+  

@@ -1,0 +1,16 @@
+{
+    "name": "Barbell Squat",
+    "type": "strength",
+    "muscleGroup": ["legs", "glutes"],
+    "equipment": "barbell",
+    "difficulty": "medium",
+    "duration": 6,
+    "reps": 8,
+    "sets": 4,
+    "weight": 100,
+    "met": 5.5,
+    "description": "Lower-body compound movement for building leg and glute strength.",
+    "videoUrl": "https://example.com/videos/barbell-squat",
+    "imageUrl": "https://example.com/images/barbell-squat.jpg"
+  }
+  

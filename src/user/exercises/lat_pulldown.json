@@ -1,0 +1,16 @@
+{
+    "name": "Lat Pulldown",
+    "type": "strength",
+    "muscleGroup": ["back", "lats"],
+    "equipment": "machine",
+    "difficulty": "medium",
+    "duration": 6,
+    "reps": 10,
+    "sets": 4,
+    "weight": 55,
+    "met": 4.0,
+    "description": "Pulling motion targeting lats and upper back using cable machine.",
+    "videoUrl": "https://example.com/videos/lat-pulldown",
+    "imageUrl": "https://example.com/images/lat-pulldown.jpg"
+  }
+  

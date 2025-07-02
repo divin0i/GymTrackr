@@ -1,0 +1,12 @@
+{
+    "name": "Stationary Bike",
+    "type": "cardio",
+    "muscleGroup": ["legs"],
+    "equipment": "bike",
+    "difficulty": "medium",
+    "duration": 30,
+    "met": 7.0,
+    "description": "Stationary biking session to build endurance and cardiovascular fitness.",
+    "videoUrl": "https://example.com/videos/bike",
+    "imageUrl": "https://example.com/images/bike.jpg"
+  }

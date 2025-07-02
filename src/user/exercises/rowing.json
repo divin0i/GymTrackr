@@ -1,0 +1,13 @@
+{
+    "name": "Rowing Machine",
+    "type": "cardio",
+    "muscleGroup": ["full body"],
+    "equipment": "rower",
+    "difficulty": "medium",
+    "duration": 20,
+    "met": 7.0,
+    "description": "Full-body cardio using a rowing machine to engage arms, back, and legs.",
+    "videoUrl": "https://example.com/videos/rower",
+    "imageUrl": "https://example.com/images/rower.jpg"
+  }
+  

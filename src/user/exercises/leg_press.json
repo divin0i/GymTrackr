@@ -1,0 +1,17 @@
+{
+    "name": "Leg Press",
+    "type": "strength",
+    "muscleGroup": ["quads", "glutes", "hamstrings"],
+    "equipment": "machine",
+    "difficulty": "medium",
+    "intensity": 2,
+    "reps": 10,
+    "sets": 4,
+    "weight": 180,
+    "duration": 8,
+    "met": 4.0,
+    "description": "A resistance machine exercise where legs are pressed against weight, focusing on lower body strength.",
+    "videoUrl": "https://example.com/videos/leg-press",
+    "imageUrl": "https://example.com/images/leg-press.jpg"
+  }
+  

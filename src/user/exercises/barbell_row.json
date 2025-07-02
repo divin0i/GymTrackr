@@ -1,0 +1,16 @@
+{
+    "name": "Barbell Row",
+    "type": "strength",
+    "muscleGroup": ["back", "rear delts"],
+    "equipment": "barbell",
+    "difficulty": "medium",
+    "duration": 7,
+    "reps": 8,
+    "sets": 4,
+    "weight": 70,
+    "met": 4.5,
+    "description": "Compound lift focusing on upper and mid-back development using a bent-over row position.",
+    "videoUrl": "https://example.com/videos/barbell-row",
+    "imageUrl": "https://example.com/images/barbell-row.jpg"
+  }
+  

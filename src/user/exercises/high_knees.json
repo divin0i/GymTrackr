@@ -1,0 +1,13 @@
+{
+    "name": "High Knees",
+    "type": "cardio",
+    "muscleGroup": ["legs", "core"],
+    "equipment": "none",
+    "difficulty": "medium",
+    "duration": 5,
+    "met": 8.0,
+    "description": "Quick running in place while lifting knees high for heart rate boost.",
+    "videoUrl": "https://example.com/videos/high-knees",
+    "imageUrl": "https://example.com/images/high-knees.jpg"
+  }
+  

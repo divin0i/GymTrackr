@@ -1,0 +1,13 @@
+{
+    "name": "Stairmaster",
+    "type": "cardio",
+    "muscleGroup": ["legs", "glutes"],
+    "equipment": "stair climber",
+    "difficulty": "hard",
+    "duration": 20,
+    "met": 9.0,
+    "description": "Cardio session simulating stair climbing for lower body and endurance.",
+    "videoUrl": "https://example.com/videos/stairmaster",
+    "imageUrl": "https://example.com/images/stairmaster.jpg"
+  }
+  

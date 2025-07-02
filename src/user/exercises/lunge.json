@@ -1,0 +1,16 @@
+{
+    "name": "Dumbbell Lunge",
+    "type": "strength",
+    "muscleGroup": ["legs", "glutes"],
+    "equipment": "dumbbell",
+    "difficulty": "medium",
+    "duration": 6,
+    "reps": 10,
+    "sets": 3,
+    "weight": 15,
+    "met": 4.5,
+    "description": "Step-forward movement with dumbbells to target glutes and hamstrings.",
+    "videoUrl": "https://example.com/videos/lunge",
+    "imageUrl": "https://example.com/images/lunge.jpg"
+  }
+  

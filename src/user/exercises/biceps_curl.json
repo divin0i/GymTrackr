@@ -1,0 +1,16 @@
+{
+    "name": "Bicep Curl",
+    "type": "strength",
+    "muscleGroup": ["biceps"],
+    "equipment": "dumbbell",
+    "difficulty": "easy",
+    "duration": 4,
+    "reps": 10,
+    "sets": 3,
+    "weight": 12,
+    "met": 3.8,
+    "description": "Isolated arm exercise focused on building biceps strength.",
+    "videoUrl": "https://example.com/videos/bicep-curl",
+    "imageUrl": "https://example.com/images/bicep-curl.jpg"
+  }
+  

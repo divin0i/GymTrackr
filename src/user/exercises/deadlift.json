@@ -1,0 +1,16 @@
+{
+    "name": "Deadlift",
+    "type": "strength",
+    "muscleGroup": ["back", "glutes", "hamstrings"],
+    "equipment": "barbell",
+    "difficulty": "hard",
+    "intensity": 3,
+    "reps": 5,
+    "sets": 4,
+    "weight": 100,
+    "duration": 10,
+    "met": 6.0,
+    "description": "A compound lift that targets posterior chain muscles by lifting a barbell from the floor.",
+    "videoUrl": "https://example.com/videos/deadlift",
+    "imageUrl": "https://example.com/images/deadlift.jpg"
+}

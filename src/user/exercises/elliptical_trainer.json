@@ -1,0 +1,13 @@
+{
+    "name": "Elliptical Trainer",
+    "type": "cardio",
+    "muscleGroup": ["legs", "arms"],
+    "equipment": "elliptical",
+    "difficulty": "medium",
+    "duration": 25,
+    "met": 5.0,
+    "description": "Low-impact cardio on an elliptical machine working upper and lower body.",
+    "videoUrl": "https://example.com/videos/elliptical",
+    "imageUrl": "https://example.com/images/elliptical.jpg"
+  }
+  

@@ -1,0 +1,16 @@
+{
+    "name": "Pull-Up",
+    "type": "strength",
+    "muscleGroup": ["back", "biceps"],
+    "equipment": "pull-up bar",
+    "difficulty": "hard",
+    "duration": 5,
+    "reps": 6,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 5.0,
+    "description": "Bodyweight upper-body exercise targeting lats, biceps, and shoulders.",
+    "videoUrl": "https://example.com/videos/pull-up",
+    "imageUrl": "https://example.com/images/pull-up.jpg"
+  }
+  

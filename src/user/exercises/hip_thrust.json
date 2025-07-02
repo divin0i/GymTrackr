@@ -1,0 +1,16 @@
+{
+    "name": "Hip Thrust",
+    "type": "strength",
+    "muscleGroup": ["glutes", "hamstrings"],
+    "equipment": "barbell",
+    "difficulty": "medium",
+    "intensity": 2,
+    "reps": 10,
+    "sets": 4,
+    "weight": 70,
+    "duration": 8,
+    "met": 5.0,
+    "description": "A glute-focused strength exercise where the hips are thrust upward with a barbell across the pelvis.",
+    "videoUrl": "https://example.com/videos/hip-thrust",
+    "imageUrl": "https://example.com/images/hip-thrust.jpg"
+  }

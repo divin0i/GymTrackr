@@ -1,0 +1,16 @@
+{
+    "name": "Crunches",
+    "type": "strength",
+    "muscleGroup": ["abs"],
+    "equipment": "bodyweight",
+    "difficulty": "easy",
+    "duration": 4,
+    "reps": 15,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 3.5,
+    "description": "Core-strengthening move targeting the upper abdominal region.",
+    "videoUrl": "https://example.com/videos/crunches",
+    "imageUrl": "https://example.com/images/crunches.jpg"
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "name": "Jump Rope",
+    "type": "cardio",
+    "muscleGroup": ["legs", "calves", "core"],
+    "equipment": "jump rope",
+    "difficulty": "medium",
+    "duration": 10,
+    "met": 11.0,
+    "description": "High-intensity cardio that improves coordination and burns calories quickly.",
+    "videoUrl": "https://example.com/videos/jump-rope",
+    "imageUrl": "https://example.com/images/jump-rope.jpg"
+  }
+  

@@ -1,0 +1,13 @@
+{
+    "name": "Burpees",
+    "type": "cardio",
+    "muscleGroup": ["full body"],
+    "equipment": "none",
+    "difficulty": "hard",
+    "duration": 5,
+    "met": 8.5,
+    "description": "Explosive full-body movement combining squat, push-up, and jump.",
+    "videoUrl": "https://example.com/videos/burpees",
+    "imageUrl": "https://example.com/images/burpees.jpg"
+  }
+  

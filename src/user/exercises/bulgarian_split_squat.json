@@ -1,0 +1,17 @@
+{
+    "name": "Bulgarian Split Squat",
+    "type": "strength",
+    "muscleGroup": ["quads", "glutes", "hamstrings"],
+    "equipment": "dumbbell",
+    "difficulty": "hard",
+    "intensity": 3,
+    "reps": 8,
+    "sets": 3,
+    "weight": 20,
+    "duration": 6,
+    "met": 5.5,
+    "description": "A unilateral lower body movement performed with rear foot elevated, focusing on legs and balance.",
+    "videoUrl": "https://example.com/videos/bulgarian-split-squat",
+    "imageUrl": "https://example.com/images/bulgarian-split-squat.jpg"
+  }
+  

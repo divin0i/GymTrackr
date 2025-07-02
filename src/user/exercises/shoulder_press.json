@@ -1,0 +1,16 @@
+{
+    "name": "Shoulder Press",
+    "type": "strength",
+    "muscleGroup": ["shoulders", "triceps"],
+    "equipment": "dumbbell",
+    "difficulty": "medium",
+    "duration": 5,
+    "reps": 10,
+    "sets": 3,
+    "weight": 20,
+    "met": 4.5,
+    "description": "Overhead pressing movement that builds shoulder and arm strength.",
+    "videoUrl": "https://example.com/videos/shoulder-press",
+    "imageUrl": "https://example.com/images/shoulder-press.jpg"
+  }
+  

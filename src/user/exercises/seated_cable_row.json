@@ -1,0 +1,16 @@
+{
+    "name": "Seated Cable Row",
+    "type": "strength",
+    "muscleGroup": ["back", "biceps"],
+    "equipment": "machine",
+    "difficulty": "medium",
+    "duration": 6,
+    "reps": 10,
+    "sets": 4,
+    "weight": 60,
+    "met": 4.5,
+    "description": "Back and arm strength exercise performed by pulling a cable handle toward the torso.",
+    "videoUrl": "https://example.com/videos/seated-row",
+    "imageUrl": "https://example.com/images/seated-row.jpg"
+  }
+  

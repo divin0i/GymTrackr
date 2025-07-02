@@ -1,0 +1,13 @@
+{
+    "name": "Running (6 mph)",
+    "type": "cardio",
+    "muscleGroup": ["legs"],
+    "equipment": "none",
+    "difficulty": "medium",
+    "duration": 30,
+    "met": 9.8,
+    "description": "Outdoor running at a moderate pace (~10 min/mile) for heart health and endurance.",
+    "videoUrl": "https://example.com/videos/running",
+    "imageUrl": "https://example.com/images/running.jpg"
+  }
+  

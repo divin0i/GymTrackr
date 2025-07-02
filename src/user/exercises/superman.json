@@ -1,0 +1,17 @@
+{
+    "name": "Superman Exercise",
+    "type": "strength",
+    "muscleGroup": ["lower back", "glutes"],
+    "equipment": "bodyweight",
+    "difficulty": "easy",
+    "duration": 5,
+    "reps": 12,
+    "sets": 3,
+    "weight": "bodyweight",
+    "met": 3.5,
+    "description": "Bodyweight exercise that strengthens the erector spinae and glutes by raising arms and legs off the ground.",
+    "videoUrl": "https://example.com/videos/superman",
+    "imageUrl": "https://example.com/images/superman.jpg"
+  }
+//   adjustedMET = baseMET * multiplier[intensity];
+// calories = ((adjustedMET × weightKg × 3.5) / 200) × duration;
