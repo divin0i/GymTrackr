@@ -1,5 +1,3 @@
-/* profile.css */
-
 .template-page {
     display: flex;
     justify-content: center;
@@ -13,15 +11,6 @@
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-  }
-  .logo {
-    width: 40px;
-    height: auto;
-  }
-  
-  .chevron-icon {
-    color: #ffffff;
-    cursor: pointer;
   }
   
   .phone-content {
@@ -38,6 +27,12 @@
     display: block;
     margin-bottom: 10px;
     font-size: 16px;
+    color: white;
+  }
+  
+  .inputs {
+    display: flex;
+    flex-direction: column;
   }
   
   .input-box {
@@ -50,11 +45,52 @@
     border-radius: 10px;
     background-color: white;
   }
+  
   .chart-container {
     margin-top: 30px;
     background-color: #0b3d91;
     padding: 20px;
     border-radius: 12px;
+  }
+  
+  .chart-toggle-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .chart-toggle-buttons button {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: white;
+    color: #084183;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .chart-toggle-buttons button.active,
+  .chart-toggle-buttons button:hover {
+    background-color: #cde2ff;
+  }
+  .logo-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+  .logo-wrapper {
+    display: flex;
+    justify-content: flex-end; /* this moves it to the right */
+    margin-bottom: 10px;
+  }
+  
+  .top-logo {
+    width: 40px;
+    height: auto;
   }
   
   
