@@ -19,7 +19,7 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
         ...currentSession,
         exercises: [
           ...currentSession.exercises,
-          { id: exercise.id, name: exercise.name, reps: 0, laps: 0, videoUrl: exercise.videoUrl, minCalories: exercise.minCalories || 10 }
+          { id: exercise.id, name: exercise.name, duration: 0, laps: 0, videoUrl: exercise.videoUrl, minCalories: exercise.minCalories || 10 }
         ]
       };
       const updatedSessions = [...sessions];
@@ -31,7 +31,7 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     }
   };
 
-  const updateRepsLaps = (index, field, delta) => {
+  const updateDurationLaps = (index, field, delta) => {
     if (!currentSession) return;
     const username = user.displayName || user.email.split('@')[0];
     const updatedSession = { ...currentSession };
@@ -64,15 +64,15 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
             <h3>Session Date: {new Date(currentSession.date).toLocaleString()}</h3>
             {currentSession.exercises.map((exercise, index) => (
               <div key={index} className='exercise-item'>
-                <p>{exercise.name}: {exercise.reps} reps, {exercise.laps} laps</p>
+                <p>{exercise.name}: {exercise.duration} min, {exercise.laps} laps</p>
                 <div className='exercise-controls'>
-                  <button onClick={() => updateRepsLaps(index, 'reps', -1)}>-</button>
-                  <span> Reps </span>
-                  <button onClick={() => updateRepsLaps(index, 'reps', 1)}>+</button>
+                  <button onClick={() => updateDurationLaps(index, 'duration', -1)}>-</button>
+                  <span> Duration (min) </span>
+                  <button onClick={() => updateDurationLaps(index, 'duration', 1)}>+</button>
                   <span> </span>
-                  <button onClick={() => updateRepsLaps(index, 'laps', -1)}>-</button>
+                  <button onClick={() => updateDurationLaps(index, 'laps', -1)}>-</button>
                   <span> Laps </span>
-                  <button onClick={() => updateRepsLaps(index, 'laps', 1)}>+</button>
+                  <button onClick={() => updateDurationLaps(index, 'laps', 1)}>+</button>
                 </div>
                 <div className='bottom-controls'>
                   <div>
@@ -85,27 +85,27 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
                 <span className='calorie-info'>Calories: {calculateCalories(exercise)} kcal</span>
               </div>
             ))}
-                <div className='total-calories'>
-                <span>Total Calories: {calculateTotalCalories()} kcal</span>
+            <div className='total-calories'>
+              <span>Total Calories: {calculateTotalCalories()} kcal</span>
+            </div>
+            <div className='session-actions'>
+              <button className='add-btn' onClick={() => setShowDropdown(!showDropdown)}>
+                <Plus size={18} style={{ translate: '-4px 0px' }} color="#000000" />
+                Add Exercise
+              </button>
+              {showDropdown && (
+                <div className='dropdown'>
+                  <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
+                    <option value="">Select Exercise</option>
+                    {exercises.map((exercise) => (
+                      <option key={exercise.id} value={exercise.id}>{exercise.name}</option>
+                    ))}
+                  </select>
+                  <button onClick={addExerciseToSession}>Add</button>
                 </div>
-                <div className='session-actions'>
-                <button className='add-btn' onClick={() => setShowDropdown(!showDropdown)}>
-                    <Plus size={18} style={{ translate: '-4px 0px' }} color="#000000" />
-                    Add Exercise
-                </button>
-                {showDropdown && (
-                    <div className='dropdown'>
-                    <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-                        <option value="">Select Exercise</option>
-                        {exercises.map((exercise) => (
-                        <option key={exercise.id} value={exercise.id}>{exercise.name}</option>
-                        ))}
-                    </select>
-                    <button onClick={addExerciseToSession}>Add</button>
-                    </div>
-                )}
-                <button className='start-btn' onClick={startSession}>Start Session</button>
-                </div>
+              )}
+              <button className='start-btn' onClick={startSession}>Start Session</button>
+            </div>
           </div>
         ) : (
           <p>No current session available.</p>

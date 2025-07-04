@@ -4,7 +4,7 @@ import './home.css';
 import { ChevronLeft, User, Edit2, Trash2, Save } from 'react-feather';
 import logo from '../Assets/logo.png';
 import { db, auth } from '../firebase/db';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import { Chart } from 'chart.js/auto';
 import CurrentSession from './CurrentSession';
 
@@ -17,6 +17,7 @@ function Home() {
   const [calorieObjectiveSetTime, setCalorieObjectiveSetTime] = useState(null); // Track when calorie goal was set
   const [history, setHistory] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [exercises, setExercises] = useState([]);
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -31,6 +32,10 @@ function Home() {
         setSessions(userData.sessions || []);
         setCalorieObjective(userData.calorieObjective || 1000);
         setCalorieObjectiveSetTime(userData.calorieObjectiveSetTime || new Date().toISOString()); // Default to now if not set
+
+        const exerciseSnapshot = await getDocs(collection(db, 'exercises'));
+        const exerciseList = exerciseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setExercises(exerciseList);
       }
     };
     fetchData();
@@ -90,11 +95,9 @@ function Home() {
   const calculateCalories = (exercise) => {
     if (!exercise || !exercise.minCalories) return 0;
     const minCalories = exercise.minCalories;
-    const reps = exercise.reps || 1;
-    const laps = exercise.laps || 1;
-    const effort = reps * laps;
-    const targetEffort = 25;
-    const maxCalories = 52.43;
+    const effort = exercise.type === 'cardio' ? (exercise.duration || 1) * (exercise.laps || 1) : (exercise.reps || 1) * (exercise.laps || 1);
+    const targetEffort = exercise.type === 'cardio' ? 60 : 25; // 60 min * 1 lap for cardio, 25 reps * laps for others
+    const maxCalories = exercise.type === 'cardio' ? 300 : 52.43; // Adjusted max for cardio
     const increase = maxCalories - minCalories;
     const calories = minCalories + (increase * (Math.max(0, effort - 1) / (targetEffort - 1)));
     return Math.max(minCalories, Math.round(calories));
@@ -170,9 +173,7 @@ function Home() {
             </a>
           </div>
           <div>
-            <a href='/options' className='user-link'>
-                <User className='user-icon' />
-            </a>
+            <User className='user-icon' />
           </div>
         </div>
         <div className='home-message'>
@@ -250,18 +251,16 @@ function Home() {
           <button onClick={saveCalorieObjective} className="save-calorie-btn">Save</button>
         </div>
         <div className='bottom-buttons'>
-            <div>
-                <CurrentSession
-                    sessions={sessions}
-                    setSessions={setSessions}
-                    exercises={[]}
-                    user={user}
-                    updateSessionInFirestore={updateSessionInFirestore}
-                    calculateCalories={calculateCalories}
-                    calculateTotalCalories={calculateTotalCalories}
-                    startSession={startSession}
-                />
-            </div>
+          <CurrentSession
+            sessions={sessions}
+            setSessions={setSessions}
+            exercises={exercises}
+            user={user}
+            updateSessionInFirestore={updateSessionInFirestore}
+            calculateCalories={calculateCalories}
+            calculateTotalCalories={calculateTotalCalories}
+            startSession={startSession}
+          />
           <button className='workout-btn' onClick={() => navigate('/workout')}>Workout</button>
         </div>
       </div>
