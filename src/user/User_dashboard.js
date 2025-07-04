@@ -71,7 +71,7 @@ function UserDashboard() {
   };
 
   return (
-    <div className="template-page">
+    <div className="userdash-page">
       <div className="phone-container">
         <div className="phone-content">
         <div className="logo-wrapper">

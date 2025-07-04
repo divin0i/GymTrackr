@@ -45,49 +45,56 @@ function Login() {
   };
 
   return (
-    <div className='login-container'>
-      <div className='phone-bar'>
-        <ChevronLeft className='chevron-icon' />
-        <div className='phone-bar'>
-          <h1 className='top_bar'></h1>
-        </div>
-        <a href='/' className='logo-link'>
-          <img src={logo} alt='GymTrakr Logo' className='logo' />
-        </a>
-      </div>
-      <form className='login-form' onSubmit={handleSubmit}>
-        <h2>Welcome Back! Glad to see you, again!</h2>
-        <div className='form-group'>
-          <input
-            placeholder='Enter your email'
-            type='email'
-            id='email'
-            name='email'
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            placeholder='Enter password'
-            type='password'
-            id='password'
-            name='password'
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className='form-group'>
-          <div className='remember-me'>
-            <a href='/forgot-password' className='forgot-password'>Forgot Password?</a>
+    <div className='login-page'>
+        <div className='login-container'>
+          <div className='phone-bar'>
+            <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
+            <div className='phone-bar'>
+              <h1 className='top_bar'></h1>
+            </div>
+            <a href='/' className='logo-link'>
+              <img src={logo} alt='GymTrakr Logo' className='logo' />
+            </a>
           </div>
+          <div className='phone-content'>
+              <form className='login-form' onSubmit={handleSubmit}>
+                <h2>Welcome Back! Glad to see you, again!</h2>
+                <div className='form-group'>
+                  <input
+                    placeholder='Enter your email'
+                    type='email'
+                    id='email'
+                    name='email'
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className='form-group'>
+                  <input
+                    placeholder='Enter password'
+                    type='password'
+                    id='password'
+                    name='password'
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className='form-group'>
+                  <div className='remember-me'>
+                    <a href='/forgot-password' className='forgot-password'>Forgot Password?</a>
+                  </div>
+                </div>
+                <button type='submit'>Login</button>
+                <p className={`message ${message.type}`}>{message.text}</p>
+                <p className='message'>Don't have an account? <a href='/register'>Register</a></p>
+              </form>
+          </div>
+            <div className='phone-bar'>
+              <h1 className='bottom_bar' style={{ marginTop: '60px' }}></h1>
+            </div>
         </div>
-        <button type='submit'>Login</button>
-        <p className={`message ${message.type}`}>{message.text}</p>
-        <p className='message'>Don't have an account? <a href='/register'>Register</a></p>
-      </form>
     </div>
   );
 }

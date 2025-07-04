@@ -12,6 +12,9 @@ import Admin from './pages/admin';
 import { auth } from './firebase/db';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import Options from './pages/option';
+import Session from './pages/session';
+import Home from './pages/home';
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -22,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
       if (user) {
         setIsAuthenticated(true);
       } else {
-        navigate('/login');
+        navigate('/options');
       }
     });
     return unsubscribe;
@@ -34,7 +37,23 @@ const ProtectedRoute = ({ children }) => {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/home",
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/options",
+    element: <Options />
   },
   {
     path: "/login",
@@ -81,6 +100,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ExerciseList type="Arms" />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/session",
+    element: (
+      <ProtectedRoute>
+        <Session />
       </ProtectedRoute>
     )
   },

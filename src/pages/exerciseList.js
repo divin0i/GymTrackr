@@ -18,7 +18,7 @@ function ExerciseList({ type }) {
       const exerciseList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setExercises(exerciseList);
       if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
+        const userDocRef = doc(db, 'users', user.displayName || user.email.split('@')[0]); // Fallback to email prefix if no displayName
         const userDocSnap = await getDoc(userDocRef);
         if (!userDocSnap.exists()) {
           await setDoc(userDocRef, { sessions: [] }, { merge: true });
@@ -56,7 +56,7 @@ function ExerciseList({ type }) {
       })).filter(e => e.reps > 0 || e.laps > 0)
     };
     const updatedSessions = [...sessions, newSession];
-    await updateDoc(doc(db, 'users', user.uid), { sessions: updatedSessions });
+    await updateDoc(doc(db, 'users', user.displayName || user.email.split('@')[0]), { sessions: updatedSessions });
     setSessions(updatedSessions);
     setSessionData({});
     alert('Added to new session!');
@@ -79,7 +79,7 @@ function ExerciseList({ type }) {
       ]
     };
     const updatedSessions = sessions.map((s, i) => i === sessionIndex ? updatedSession : s);
-    await updateDoc(doc(db, 'users', user.uid), { sessions: updatedSessions });
+    await updateDoc(doc(db, 'users', user.displayName || user.email.split('@')[0]), { sessions: updatedSessions });
     setSessions(updatedSessions);
     setSessionData({});
     alert('Added to existing session!');

@@ -180,21 +180,20 @@
       "description": "Core-strengthening move targeting the upper abdominal region.",
       "videoUrl": "https://youtu.be/eJ19kXHQQsI?si=eJf693QfCPOKEP31"
     },
-    // {
-    //   "name": "Dead Bug",
-    //   "type": "strength",
-    //   "muscleGroup": ["core"],
-    //   "equipment": "bodyweight",
-    //   "difficulty": "easy",
-    //   "duration": 4,
-    //   "reps": 10,
-    //   "sets": 3,
-    //   "weight": "bodyweight",
-    //   "met": 3.0,
-    //   "description": "Controlled core movement for abs and deep stabilizers.",
-    //   "videoUrl": "https://example.com/videos/dead-bug"
-    // },
-
+    {
+      "name": "Dead Bug",
+      "type": "strength",
+      "muscleGroup": ["core"],
+      "equipment": "bodyweight",
+      "difficulty": "easy",
+      "duration": 4,
+      "reps": 10,
+      "sets": 3,
+      "weight": "bodyweight",
+      "met": 3.0,
+      "description": "Controlled core movement for abs and deep stabilizers.",
+      "videoUrl": "https://example.com/videos/dead-bug"
+    },
     {
         "name": "Superman Exercise",
         "type": "strength",
@@ -252,9 +251,3 @@
         "videoUrl": "https://youtu.be/lJoozxC0Rns?si=pmjENy6aqnjxaF3V"
       }
 ]
-
-
-
-//https://youtu.be/B2Bi9Xr6d2A?si=E1QDuKrdXm5C-3p8 jumping jacks
-
-//https://youtu.be/I9m4fz4zB8I?si=SID_vcGXVtHCgCKi sit ups

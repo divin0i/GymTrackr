@@ -1,0 +1,284 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #282828;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+}
+
+.phone-container {
+  display: flex;
+  flex-direction: column;
+  width: 305px;
+  height: 667px;
+  background-color: #084183;
+  border-radius: 13px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  justify-content: space-between;
+}
+
+.home-page h3 {
+  color: #ffffff;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.home-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.chevron-icon {
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+}
+
+.user-icon {
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.top_bar {
+  display: none;
+}
+
+.notepad-container {
+  flex-grow: 1;
+  background: transparent;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 200px;
+  padding: 10px;
+}
+
+.notepad-container h2 {
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.objective-input {
+  width: 92%;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.objectives-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.objective-item {
+  width: 92%;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+  padding: 8px;
+  background-color: #ffffff11;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.objective-item.completed {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.objective-item span {
+  font-size: 19px;
+  color: #ffffff;
+}
+
+.objective-item.completed span {
+  color: #ffffff;
+}
+
+.edit-input {
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+.checkbox {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.notepad-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-icon, .delete-icon, .save-icon {
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.edit-icon:hover, .delete-icon:hover, .save-icon:hover {
+  color: #28a745;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+  margin-top: 20px;
+  padding: 10px;
+  background: #ffffff11;
+  border-radius: 5px;
+}
+
+.clock-container {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.clock-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clock-label {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.clock-value {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.chart-wrapper {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.color-box {
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.calorie-settings {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #ffffff11;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.calorie-settings label {
+  color: #ffffff;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.calorie-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100px;
+  margin-right: 10px;
+}
+
+.save-calorie-btn {
+  padding: 5px 10px;
+  background-color: #184d8b;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.save-calorie-btn:hover {
+  background-color: #000000;
+  transition: 0.5s ease;
+}
+
+.bottom-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.workout-btn, .session-btn {
+  padding: 10px;
+  background-color: #184d8b !important;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  margin: -10px auto 20px;
+}
+
+.session-btn:hover, .workout-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
+}

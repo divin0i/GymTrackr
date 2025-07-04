@@ -82,6 +82,7 @@
   font-size: 18px;
   font-weight: bold;
   margin: 0;
+  text-transform: uppercase;
 }
 
 .expandable-section {
@@ -89,13 +90,151 @@
   overflow: hidden;
   transition: max-height 0.3s ease-out;
   background-color: #ffffff;
-  color: #084183;
+  color: #ffffff;
   padding: 0 10px;
 }
 
 .expandable-section.active {
-  max-height: 300px; /* Adjust based on content */
+  max-height: 500px;
   padding: 10px;
+  overflow-y: scroll;
+  background: rgba(0, 0, 0, 0.231)  !important;
+}
+
+.exercise-item {
+  margin: 10px 0;
+  padding: 5px;
+  border-bottom: 1px solid #0066ff;
+  font-size: 18px;
+}
+
+.exercise-item p {
+  font-size: 17px !important;
+}
+
+.exercise-item:hover {
+  background-color: #f0f0f0;
+}
+
+.exercise-controls {
+  margin-top: 5px;
+}
+
+.exercise-controls button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.exercise-controls button:hover {
+  background-color: #0056b3;
+}
+
+.bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.trash-btn {
+  margin-top: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.trash-btn:hover {
+  background-color: #ff4d4d !important;
+  color: #ffffff;
+  border: none;
+  transition: 0.5s ease;
+}
+
+.tutorial-link {
+  display: block;
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.tutorial-link:hover {
+  text-decoration: underline;
+}
+
+.session-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.add-btn {
+  padding: 3px 3px;
+  background-color: #dfdfdf;
+  color: #000000;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  width: 120px;
+}
+
+.add-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown select {
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.dropdown button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dropdown button:hover {
+  background-color: #0056b3;
+}
+
+.start-btn {
+  padding: 5px 10px;
+  background-color: #dfdfdf;
+  color: #000000;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  width: 120px;
+}
+
+.start-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
 }
 
 .workout-content {

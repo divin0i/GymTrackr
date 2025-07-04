@@ -1,0 +1,171 @@
+.workout-sessions {
+  margin-bottom: 20px;
+}
+
+.workout-sessions-title {
+  background-color: #184d8b !important;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258) !important;
+}
+
+.sess-title {
+  color: #ffffff;
+  margin: 0;
+  font-size: 18px;
+}
+
+.expandable-section {
+  display: none;
+}
+
+.expandable-section.active {
+  display: block;
+  padding: 10px;
+  background-color: #ffffff11;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.exercise-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ffffff22;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.exercise-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.exercise-controls button {
+  padding: 2px 8px;
+  background-color: #000000;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.bottom-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.tutorial-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.tutorial-link:hover {
+  text-decoration: underline;
+}
+
+.trash-btn {
+  cursor: pointer;
+}
+
+.calorie-info {
+  margin-top: 5px;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.total-calories {
+    text-transform: uppercase;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: #ffffff22;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.258);
+}
+
+.total-calories span {
+  color: #00ff3c;
+  font-weight: bold;
+}
+
+.session-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-btn {
+  padding: 5px 10px;
+  background-color: #dfdfdf;
+  color: #000000;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    width: 135px;
+}
+
+.add-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
+}
+
+.dropdown {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.dropdown select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.dropdown button {
+  padding: 5px 10px;
+  background-color: #dfdfdf;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dropdown button:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
+}
+
+.start-btn {
+  padding: 5px 10px;
+  background-color: #dfdfdf;
+  color: #000000;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
+}
+
+.session-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 10px;
+}
