@@ -19,6 +19,7 @@ function Home() {
   const [sessions, setSessions] = useState([]);
   const [exercises, setExercises] = useState([]);
   const user = auth.currentUser;
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,16 +93,20 @@ function Home() {
     await updateDoc(userDocRef, { sessions: updatedSessions });
   };
 
-  const calculateCalories = (exercise) => {
-    if (!exercise || !exercise.minCalories) return 0;
-    const minCalories = exercise.minCalories;
-    const effort = exercise.type === 'cardio' ? (exercise.duration || 1) * (exercise.laps || 1) : (exercise.reps || 1) * (exercise.laps || 1);
-    const targetEffort = exercise.type === 'cardio' ? 60 : 25; // 60 min * 1 lap for cardio, 25 reps * laps for others
-    const maxCalories = exercise.type === 'cardio' ? 300 : 52.43; // Adjusted max for cardio
-    const increase = maxCalories - minCalories;
-    const calories = minCalories + (increase * (Math.max(0, effort - 1) / (targetEffort - 1)));
-    return Math.max(minCalories, Math.round(calories));
-  };
+const calculateCalories = (exercise) => {
+
+  if (!exercise || !exercise.minCalories) return 0;
+  const userWeight = userData?.weight || 70; // Replace with actual user weight
+  if (exercise.type === 'cardio') {
+    const met = exercise.met || 3;
+    const durationMinutes = exercise.duration || 1;
+    return Math.round(met * userWeight * durationMinutes / 60);
+  } else {
+    const intensityFactor = exercise.intensity === 'high' ? 1.5 : exercise.intensity === 'medium' ? 1.0 : 0.5;
+    const caloriesPerSet = (userWeight + (exercise.weight || 0)) * intensityFactor * 0.1;
+    return Math.round(caloriesPerSet * (exercise.sets || 1));
+  }
+};
 
   const calculateTotalCalories = () => {
     if (!sessions.length) return 0;

@@ -109,11 +109,21 @@
 
 .counter-group {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
-.counter-group div {
+.counter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.counter-row div {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -130,6 +140,22 @@
 
 .counter-group span {
   font-size: 16px;
+}
+
+.duration-input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 80px;
+  background-color: #ffffff;
+  color: #000000;
+  margin: 0 5px;
+}
+
+.weight-slider {
+  width: 100px;
+  margin: 0 5px;
 }
 
 .delete-btn {

@@ -43,15 +43,22 @@
   align-items: center;
   gap: 5px;
   margin-top: 5px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  padding: 5px 0;
 }
 
 .exercise-controls button {
-  padding: 2px 8px;
-  background-color: #000000;
+  padding: 5px;
+  background-color: transparent;
   border: none;
-  border-radius: 50%;
   cursor: pointer;
-  font-weight: bold;
+}
+
+.exercise-controls span {
+  color: #000000;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .bottom-controls {
@@ -74,6 +81,14 @@
   cursor: pointer;
 }
 
+.trash-btn:hover {
+  background-color: #ff4d4d !important;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 2px 8px;
+  transition: 0.5s ease;
+}
+
 .calorie-info {
   margin-top: 5px;
   color: #28a745;
@@ -81,7 +96,7 @@
 }
 
 .total-calories {
-    text-transform: uppercase;
+  text-transform: uppercase;
   margin-top: 10px;
   padding: 5px;
   background-color: #ffffff22;
@@ -96,7 +111,7 @@
 
 .session-actions {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
   margin-top: 10px;
 }
@@ -112,7 +127,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-    width: 135px;
+  width: 135px;
 }
 
 .add-btn:hover {
@@ -123,14 +138,30 @@
 
 .dropdown {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 5px;
   margin-top: 5px;
+  max-width: 100%;
 }
 
 .dropdown select {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  background-color: #ffffff;
+  color: #000000;
+  width: 100%;
+  max-width: 200px;
+}
+
+.dropdown input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100px;
+  background-color: #ffffff;
+  color: #000000;
+  margin-right: 10px;
 }
 
 .dropdown button {
@@ -139,6 +170,8 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100px;
+  align-self: flex-start;
 }
 
 .dropdown button:hover {
@@ -155,6 +188,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 135px;
 }
 
 .start-btn:hover {
@@ -168,4 +202,15 @@
   flex-direction: row;
   gap: 10px;
   margin-top: 10px;
+}
+
+.weight-input, .duration-input {
+  margin: 5px 0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 80px;
+  background-color: #ffffff;
+  color: #000000;
 }

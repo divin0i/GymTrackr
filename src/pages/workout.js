@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './workout.css';
-import { ChevronLeft, Plus, Trash2 } from 'react-feather';
+import { ChevronLeft, Plus, Trash2, PlusCircle, MinusCircle } from 'react-feather';
 import logo from '../Assets/logo.png';
 import Cardio from '../Assets/cardio.png';
 import Chest from '../Assets/chest.png';
@@ -101,13 +101,17 @@ function Workout() {
 
   const calculateCalories = (exercise) => {
     if (!exercise || !exercise.minCalories) return 0;
-    const minCalories = exercise.minCalories;
-    const effort = exercise.type === 'cardio' ? (exercise.duration || 1) * (exercise.laps || 1) : (exercise.reps || 1) * (exercise.laps || 1);
-    const targetEffort = exercise.type === 'cardio' ? 60 : 25; // 60 min * 1 lap for cardio, 25 reps * laps for others
-    const maxCalories = exercise.type === 'cardio' ? 300 : 52.43; // Adjusted max for cardio
-    const increase = maxCalories - minCalories;
-    const calories = minCalories + (increase * (Math.max(0, effort - 1) / (targetEffort - 1)));
-    return Math.max(minCalories, Math.round(calories));
+    const userWeight = userData?.weight || 70;
+    if (exercise.type === 'cardio') {
+      const met = exercise.met || 3;
+      const durationSeconds = exercise.duration || 1;
+      const durationMinutes = durationSeconds / 60;
+      return Math.round(met * userWeight * durationMinutes / 60);
+    } else {
+      const intensityFactor = exercise.intensity === 'high' ? 1.5 : exercise.intensity === 'medium' ? 1.0 : 0.5;
+      const caloriesPerSet = (userWeight + (exercise.weight || 0)) * intensityFactor * 0.1;
+      return Math.round(caloriesPerSet * (exercise.sets || 1));
+    }
   };
 
   const calculateTotalCalories = () => {
@@ -143,27 +147,27 @@ function Workout() {
                 <h3>Session Date: {new Date(currentSession.date).toLocaleString()}</h3>
                 {currentSession.exercises.map((exercise, index) => (
                   <div key={index} className='exercise-item'>
-                    <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} min, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
+                    <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
                     <div className='exercise-controls'>
                       {exercise.type === 'cardio' ? (
                         <>
-                          <button onClick={() => updateRepsLaps(index, 'reps', -1)}>-</button>
-                          <span> Min </span>
-                          <button onClick={() => updateRepsLaps(index, 'reps', 1)}>+</button>
+                          <button onClick={() => updateRepsLaps(index, 'duration', -1)}><MinusCircle size={15} /></button>
+                          <span>Sec</span>
+                          <button onClick={() => updateRepsLaps(index, 'duration', 1)}><PlusCircle size={15} /></button>
                           <span> </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}>-</button>
-                          <span> Laps </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}>+</button>
+                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
+                          <span>Laps</span>
+                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
                         </>
                       ) : (
                         <>
-                          <button onClick={() => updateRepsLaps(index, 'reps', -1)}>-</button>
-                          <span> Reps </span>
-                          <button onClick={() => updateRepsLaps(index, 'reps', 1)}>+</button>
+                          <button onClick={() => updateRepsLaps(index, 'reps', -1)}><MinusCircle size={15} /></button>
+                          <span>Reps</span>
+                          <button onClick={() => updateRepsLaps(index, 'reps', 1)}><PlusCircle size={15} /></button>
                           <span> </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}>-</button>
-                          <span> Laps </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}>+</button>
+                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
+                          <span>Laps</span>
+                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
                         </>
                       )}
                     </div>
@@ -214,7 +218,7 @@ function Workout() {
                   <h3>Session Date: {new Date(session.date).toLocaleString()}</h3>
                   {session.exercises.map((exercise, exIndex) => (
                     <div key={exIndex}>
-                      <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} min, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
+                      <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
                       <a href={exercise.videoUrl} target="_blank" rel="noopener noreferrer" className="tutorial-link">Tutorial</a>
                     </div>
                   ))}

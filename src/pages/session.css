@@ -85,7 +85,7 @@
   background-color: #fffefe89;
 }
 
-.checklist-item.checked {
+.checklist-item.expanded {
   background-color: #27e052;
   color: #ffffff;
 }
@@ -97,7 +97,7 @@
   color: #084183;
 }
 
-.checklist-item.checked p {
+.checklist-item.expanded p {
   color: #ffffff;
 }
 
@@ -115,12 +115,76 @@
   text-align: center;
 }
 
-.checklist-item.checked .tutorial-link {
+.checklist-item.expanded .tutorial-link {
   color: #ffffff;
 }
 
-.checklist-item.checked .tutorial-link:hover {
+.checklist-item.expanded .tutorial-link:hover {
   color: #e0e0e0;
+}
+
+.exercise-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.exercise-controls input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 80px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.trapezium-timer {
+  margin-top: 10px;
+  padding: 10px;
+  background: linear-gradient(to bottom right, #ffffff11, #084183);
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  resize: vertical;
+  overflow: auto;
+  min-height: 50px;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.trapezium-timer span {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.trapezium-timer input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 80px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.trapezium-timer button {
+  padding: 5px 10px;
+  background-color: #dfdfdf;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #000000;
+}
+
+.trapezium-timer button:hover {
+  background-color: #000000;
+  color: #ffffff;
+  transition: 0.5s ease;
 }
 
 .phone-bottom-bar {
