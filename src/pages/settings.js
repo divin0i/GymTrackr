@@ -149,107 +149,146 @@ function Settings() {
         </div>
         <div className='settings-content'>
           <h2>Settings</h2>
-          <div className='settings-form'>
+        <div className='settings-form'>
             <div className='form-group'>
-              <label>Name:</label>
-              <input
+                <label>Name:</label>
+                <input
                 type="text"
                 value={userData.displayName}
                 onChange={(e) => handleChange('displayName', e.target.value)}
                 className="settings-input"
                 readOnly={!isEditing}
-              />
+                />
             </div>
             <div className='form-group'>
-              <label>Email:</label>
-              <input
+                <label>Email:</label>
+                <input
                 type="email"
                 value={userData.email}
                 className="settings-input"
                 readOnly
-              />
+                />
             </div>
             <div className='form-group'>
-              <label>Weight (kg):</label>
-              <input
-                type="number"
-                value={userData.weight}
-                onChange={(e) => handleChange('weight', parseInt(e.target.value) || 0)}
-                min="0"
-                className="settings-input"
-                readOnly={!isEditing}
-              />
+                <label>Weight (kg):</label>
+                {isEditing ? (
+                <>
+                    <input
+                    type="range"
+                    value={userData.weight}
+                    onChange={(e) => handleChange('weight', parseInt(e.target.value) || 0)}
+                    min="30"
+                    max="200"
+                    step="1"
+                    className="slider-input"
+                    />
+                    <span className="slider-value">{userData.weight} kg</span>
+                </>
+                ) : (
+                <input
+                    type="number"
+                    value={userData.weight}
+                    readOnly
+                    className="settings-input"
+                />
+                )}
             </div>
             <div className='form-group'>
-              <label>Height (cm):</label>
-              <input
-                type="number"
-                value={userData.height}
-                onChange={(e) => handleChange('height', parseInt(e.target.value) || 0)}
-                min="0"
-                className="settings-input"
-                readOnly={!isEditing}
-              />
+                <label>Height (cm):</label>
+                {isEditing ? (
+                <>
+                    <input
+                    type="range"
+                    value={userData.height}
+                    onChange={(e) => handleChange('height', parseInt(e.target.value) || 0)}
+                    min="100"
+                    max="250"
+                    step="1"
+                    className="slider-input"
+                    />
+                    <span className="slider-value">{userData.height} cm</span>
+                </>
+                ) : (
+                <input
+                    type="number"
+                    value={userData.height}
+                    readOnly
+                    className="settings-input"
+                />
+                )}
             </div>
             <div className='form-group'>
-              <label>Age:</label>
-              <input
-                type="number"
-                value={userData.age}
-                onChange={(e) => handleChange('age', parseInt(e.target.value) || 0)}
-                min="0"
-                className="settings-input"
-                readOnly={!isEditing}
-              />
+                <label>Age:</label>
+                {isEditing ? (
+                <>
+                    <input
+                    type="range"
+                    value={userData.age}
+                    onChange={(e) => handleChange('age', parseInt(e.target.value) || 0)}
+                    min="10"
+                    max="100"
+                    step="1"
+                    className="slider-input"
+                    />
+                    <span className="slider-value">{userData.age} yrs</span>
+                </>
+                ) : (
+                <input
+                    type="number"
+                    value={userData.age}
+                    readOnly
+                    className="settings-input"
+                />
+                )}
             </div>
             <div className='form-group'>
-              <label>Current Password:</label>
-              <input
+                <label>Current Password:</label>
+                <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="settings-input"
                 readOnly={!isEditing}
-              />
+                />
             </div>
             <div className='form-group'>
-              <label>New Password:</label>
-              <input
+                <label>New Password:</label>
+                <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="settings-input"
                 readOnly={!isEditing}
-              />
+                />
             </div>
             <div className='form-group'>
-              <label>Confirm New Password:</label>
-              <input
+                <label>Confirm New Password:</label>
+                <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="settings-input"
                 readOnly={!isEditing}
-              />
+                />
             </div>
             <div className='edit-save'>
-              {isEditing ? (
+                {isEditing ? (
                 <div className='button-group'>
-                  <button onClick={handleSave} className="save-settings-btn">Save Changes</button>
-                  <button onClick={handleCancel} className="cancel-settings-btn">Cancel Edit</button>
+                    <button onClick={handleSave} className="save-settings-btn">Save Changes</button>
+                    <button onClick={handleCancel} className="cancel-settings-btn">Cancel Edit</button>
                 </div>
-              ) : (
+                ) : (
                 <button onClick={() => setIsEditing(true)} className="edit-settings-btn">
-                  Edit Settings <Edit size={16} style={{ marginLeft: '10px', transform: 'translateY(2px)' }} />
+                    Edit Settings <Edit size={16} style={{ marginLeft: '10px', transform: 'translateY(2px)' }} />
                 </button>
-              )}
-              {message && <p className={`message ${message.includes('Error') ? 'error' : 'success'}`}>{message}</p>}
-              <div className='account-actions'>
+                )}
+                {message && <p className={`message ${message.includes('Error') ? 'error' : 'success'}`}>{message}</p>}
+                <div className='account-actions'>
                 <button onClick={handleLogout} className="logout-btn">Logout</button>
                 <button onClick={handleDeleteAccount} className="del-btn">Delete Account</button>
-              </div>
+                </div>
             </div>
-          </div>
+        </div>
         </div>
       </div>
     </div>
