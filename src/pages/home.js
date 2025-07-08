@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
-import { ChevronLeft, User, Edit2, Trash2, Save } from 'react-feather';
+import { ChevronLeft, User, Edit2, Trash2, Save, Settings, LogOut } from 'react-feather';
 import logo from '../Assets/logo.png';
 import { db, auth } from '../firebase/db';
 import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
@@ -20,6 +20,8 @@ function Home() {
   const [exercises, setExercises] = useState([]);
   const user = auth.currentUser;
   const [userData, setUserData] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState("N/A"); // New state for real-time timer
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +35,7 @@ function Home() {
         setSessions(userData.sessions || []);
         setCalorieObjective(userData.calorieObjective || 1000);
         setCalorieObjectiveSetTime(userData.calorieObjectiveSetTime || new Date().toISOString()); // Default to now if not set
+        setUserData(userData);
 
         const exerciseSnapshot = await getDocs(collection(db, 'exercises'));
         const exerciseList = exerciseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -41,6 +44,28 @@ function Home() {
     };
     fetchData();
   }, [user]);
+
+  // Real-time timer effect
+  useEffect(() => {
+    let timer;
+    if (calorieObjectiveSetTime) {
+      timer = setInterval(() => {
+        const setTime = new Date(calorieObjectiveSetTime);
+        const endTime = new Date(setTime.getTime() + 24 * 60 * 60 * 1000); // 24 hours from set time
+        const now = new Date();
+        const diffMs = endTime - now;
+        if (diffMs <= 0) {
+          setTimeRemaining("Expired");
+        } else {
+          const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+          const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+          setTimeRemaining(`${diffHours}h ${diffMinutes}m ${diffSeconds}s`);
+        }
+      }, 1000); // Update every second
+    }
+    return () => clearInterval(timer); // Cleanup on unmount or dependency change
+  }, [calorieObjectiveSetTime]); // Re-run when calorieObjectiveSetTime changes
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -93,20 +118,19 @@ function Home() {
     await updateDoc(userDocRef, { sessions: updatedSessions });
   };
 
-const calculateCalories = (exercise) => {
-
-  if (!exercise || !exercise.minCalories) return 0;
-  const userWeight = userData?.weight || 70; // Replace with actual user weight
-  if (exercise.type === 'cardio') {
-    const met = exercise.met || 3;
-    const durationMinutes = exercise.duration || 1;
-    return Math.round(met * userWeight * durationMinutes / 60);
-  } else {
-    const intensityFactor = exercise.intensity === 'high' ? 1.5 : exercise.intensity === 'medium' ? 1.0 : 0.5;
-    const caloriesPerSet = (userWeight + (exercise.weight || 0)) * intensityFactor * 0.1;
-    return Math.round(caloriesPerSet * (exercise.sets || 1));
-  }
-};
+  const calculateCalories = (exercise) => {
+    if (!exercise || !exercise.minCalories) return 0;
+    const userWeight = userData?.weight || 70; // Replace with actual user weight
+    if (exercise.type === 'cardio') {
+      const met = exercise.met || 3;
+      const durationMinutes = exercise.duration || 1;
+      return Math.round(met * userWeight * durationMinutes / 60);
+    } else {
+      const intensityFactor = exercise.intensity === 'high' ? 1.5 : exercise.intensity === 'medium' ? 1.0 : 0.5;
+      const caloriesPerSet = (userWeight + (exercise.weight || 0)) * intensityFactor * 0.1;
+      return Math.round(caloriesPerSet * (exercise.sets || 1));
+    }
+  };
 
   const calculateTotalCalories = () => {
     if (!sessions.length) return 0;
@@ -131,16 +155,7 @@ const calculateCalories = (exercise) => {
   };
 
   const getTimeRemaining = () => {
-    if (!calorieObjectiveSetTime) return "N/A";
-    const setTime = new Date(calorieObjectiveSetTime);
-    const endTime = new Date(setTime.getTime() + 24 * 60 * 60 * 1000); // 24 hours from set time
-    const now = new Date();
-    const diffMs = endTime - now;
-    if (diffMs <= 0) return "Expired";
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-    return `${diffHours}h ${diffMinutes}m ${diffSeconds}s`;
+    return timeRemaining; // Return the real-time state value
   };
 
   useEffect(() => {
@@ -152,7 +167,6 @@ const calculateCalories = (exercise) => {
     new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: ['Burned', 'Remaining'],
         datasets: [{
           data: [totalBurned, Math.max(0, calorieObjective - totalBurned)],
           backgroundColor: ['#28a745', '#e0e0e0']
@@ -164,6 +178,11 @@ const calculateCalories = (exercise) => {
       }
     });
   }, [calorieObjective, history]);
+
+  const handleLogout = () => {
+    auth.signOut();
+    navigate('/login');
+  };
 
   return (
     <div className='home-page'>
@@ -177,8 +196,18 @@ const calculateCalories = (exercise) => {
               <img src={logo} alt='GymTrakr Logo' className='logo' />
             </a>
           </div>
-          <div>
-            <User className='user-icon' />
+          <div className='user-dropdown'>
+            <User className='user-icon' onClick={() => setShowDropdown(!showDropdown)} />
+            {showDropdown && (
+              <div className='dropdown-menu'>
+                <div className='dropdown-item' onClick={() => { navigate('/settings'); setShowDropdown(false); }}>
+                  <Settings size={16} /> Settings
+                </div>
+                <div className='dropdown-item' onClick={handleLogout}>
+                  <LogOut size={16} /> Logout
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className='home-message'>

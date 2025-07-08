@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './register.css';
 import { db, auth } from '../firebase/db';
-import { doc, getDoc, setDoc, collection } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { ChevronLeft } from 'react-feather';
 import logo from '../Assets/logo.png';
@@ -80,7 +80,11 @@ function Register() {
         age: parseInt(formData.age),
         gender: formData.gender,
         createdAt: new Date(),
+        displayName: formData.username // Ensure displayName matches username
       });
+
+      // Update auth profile with displayName
+      await auth.currentUser.updateProfile({ displayName: formData.username });
 
       setMessage({ text: 'Registration successful!', type: 'success' });
       setTimeout(() => {
@@ -221,8 +225,7 @@ function Register() {
                   </select>
                 </div>
                 <button type='submit'>Register</button>
-                  <button type='button' className='back-btn' style={{ marginTop: '10px' }} onClick={() => setStep(1)}>Back</button>
-
+                <button type='button' className='back-btn' style={{ marginTop: '10px' }} onClick={() => setStep(1)}>Back</button>
                 <p className={`message ${message.type}`}>{message.text}</p>
               </form>
             )}

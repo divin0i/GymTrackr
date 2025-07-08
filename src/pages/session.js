@@ -17,81 +17,141 @@ function Session() {
   const timerRefs = useRef({});
 
   useEffect(() => {
-    const initialStates = {};
-    session.exercises.forEach((exercise, index) => {
-      initialStates[index] = {
-        reps: exercise.reps || 0,
-        laps: exercise.laps || 1,
-        weight: exercise.weight || 0,
-        duration: exercise.duration || 0,
-        isExpanded: false
-      };
-    });
-    setExerciseStates(initialStates);
-    setTimeLeft(prev => {
-      const newTime = {};
-      session.exercises.forEach((_, index) => {
-        newTime[index] = exerciseStates[index]?.duration || 0;
-      });
-      return newTime;
-    });
-  }, [session]);
+    const fetchData = async () => {
+      if (user) {
+        const username = user.displayName || user.email.split('@')[0];
+        const userDocRef = doc(db, 'users', username);
+        const userDocSnap = await getDoc(userDocRef);
+        const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [] };
+        const currentSession = userData.sessions.find(s => s === session) || session;
+        const initialStates = {};
+        currentSession.exercises.forEach((exercise, index) => {
+          initialStates[index] = {
+            reps: exercise.reps || 0,
+            laps: exercise.laps || 1,
+            weight: exercise.weight || 0,
+            duration: exercise.duration || 0,
+            isExpanded: exercise.isExpanded || false
+          };
+        });
+        setExerciseStates(initialStates);
+        setTimeLeft(prev => {
+          const newTime = {};
+          currentSession.exercises.forEach((_, index) => {
+            newTime[index] = exerciseStates[index]?.duration || 0;
+          });
+          return newTime;
+        });
+        setCountdown(prev => {
+          const newCountdown = {};
+          currentSession.exercises.forEach((_, index) => {
+            newCountdown[index] = exerciseStates[index]?.isExpanded && !timerActive[index] ? 3 : 0;
+          });
+          return newCountdown;
+        });
+      }
+    };
+    fetchData();
+  }, [session, user]);
 
+  // Real-time countdown effect
   useEffect(() => {
+    const timers = {};
     Object.keys(countdown).forEach(index => {
       if (countdown[index] > 0) {
-        const timer = setInterval(() => {
-          setCountdown(prev => ({ ...prev, [index]: prev[index] - 1 }));
+        console.log(`[Countdown] Starting for index ${index}: ${countdown[index]}s`);
+        timers[index] = setInterval(() => {
+          setCountdown(prev => {
+            const newCountdown = { ...prev, [index]: prev[index] - 1 };
+            console.log(`[Countdown] Attempting decrement for index ${index}, Time Left: ${newCountdown[index]}s`);
+            if (newCountdown[index] <= 0) {
+              console.log(`[Countdown] Finished for index ${index}, Starting timer`);
+              setTimerActive(prev => ({ ...prev, [index]: true }));
+              setCountdown(prev => ({ ...prev, [index]: 0 }));
+              startDurationTimer(index); // Start timer after countdown
+            }
+            return newCountdown;
+          });
         }, 1000);
-        if (countdown[index] === 0) {
-          setTimerActive(prev => ({ ...prev, [index]: true }));
-          startTimer(index); // Auto-start timer after countdown
-        }
-        return () => clearInterval(timer);
       }
     });
+    return () => Object.values(timers).forEach(timer => clearInterval(timer)); // Cleanup
   }, [countdown]);
 
-  const startTimer = (index) => {
-    if (!timerRefs.current[index] && timerActive[index] && timeLeft[index] > 0) {
+  // Function to start and manage duration timer
+  const startDurationTimer = (index) => {
+    if (timerActive[index] && timeLeft[index] > 0 && !timerRefs.current[index]) {
+      console.log(`[Timer] Starting for index ${index}, Initial Time: ${timeLeft[index]}s`);
       timerRefs.current[index] = setInterval(() => {
         setTimeLeft(prev => {
-          const newTime = { ...prev, [index]: prev[index] - 1 };
-          if (newTime[index] <= 0) {
+          const currentTime = prev[index] || 0;
+          const newTime = currentTime - 1;
+          console.log(`[Timer] Attempting decrement for index ${index}, Current Time: ${currentTime}s, New Time: ${newTime}s, Active: ${timerActive[index]}`);
+          if (newTime <= 0) {
+            console.log(`[Timer] Finished for index ${index}, Time Left: 0s`);
             clearInterval(timerRefs.current[index]);
             timerRefs.current[index] = null;
             setTimerActive(prev => ({ ...prev, [index]: false }));
           }
-          updateExercise(index, 'duration', newTime[index]);
-          return newTime;
+          updateExercise(index, 'duration', newTime);
+          return { ...prev, [index]: newTime };
         });
       }, 1000);
     }
   };
 
+  // Real-time duration timer effect (triggers start)
+  useEffect(() => {
+    Object.keys(timerActive).forEach(index => {
+      if (timerActive[index] && timeLeft[index] > 0) {
+        startDurationTimer(index);
+      } else if (timeLeft[index] <= 0 && timerRefs.current[index]) {
+        console.log(`[Timer] Clearing interval for index ${index} due to time expiry`);
+        clearInterval(timerRefs.current[index]);
+        timerRefs.current[index] = null;
+      }
+    });
+  }, [timerActive, timeLeft]);
+
   const pauseTimer = (index) => {
+    console.log(`[Timer] Pausing for index ${index}, Time Left: ${timeLeft[index]}s`);
     clearInterval(timerRefs.current[index]);
     timerRefs.current[index] = null;
     setTimerActive(prev => ({ ...prev, [index]: false }));
   };
 
   const resumeTimer = (index) => {
+    console.log(`[Timer] Resuming for index ${index}, Time Left: ${timeLeft[index]}s`);
     setTimerActive(prev => ({ ...prev, [index]: true }));
-    startTimer(index);
+    startDurationTimer(index);
   };
 
   const toggleExpand = (index) => {
-    setExerciseStates(prev => ({
-      ...prev,
-      [index]: { ...prev[index], isExpanded: !prev[index].isExpanded }
-    }));
-    if (!exerciseStates[index]?.isExpanded && session.exercises[index].type === 'cardio') {
-      setCountdown(prev => ({ ...prev, [index]: 3 }));
-      setTimeLeft(prev => ({ ...prev, [index]: exerciseStates[index]?.duration || 0 }));
-      setTimerActive(prev => ({ ...prev, [index]: false }));
-      clearInterval(timerRefs.current[index]);
-      timerRefs.current[index] = null;
-    }
+    setExerciseStates(prev => {
+      const newState = {
+        ...prev,
+        [index]: { ...prev[index], isExpanded: !prev[index].isExpanded }
+      };
+      if (user && session.exercises.length > 0) {
+        const username = user.displayName || user.email.split('@')[0];
+        const userDocRef = doc(db, 'users', username);
+        getDoc(userDocRef).then(userDocSnap => {
+          const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [] };
+          const updatedSessions = userData.sessions.map(s =>
+            s === session ? { ...s, exercises: s.exercises.map((e, i) => i === index ? { ...e, isExpanded: newState[index].isExpanded } : e) } : s
+          );
+          updateDoc(userDocRef, { sessions: updatedSessions });
+        });
+      }
+      if (newState[index].isExpanded && session.exercises[index].type === 'cardio') {
+        setCountdown(prev => ({ ...prev, [index]: 3 }));
+        setTimeLeft(prev => ({ ...prev, [index]: newState[index].duration || 0 }));
+        setTimerActive(prev => ({ ...prev, [index]: false }));
+        clearInterval(timerRefs.current[index]);
+        timerRefs.current[index] = null;
+      }
+      return newState;
+    });
   };
 
   const updateExercise = (index, field, value) => {
@@ -102,8 +162,8 @@ function Session() {
         const userDocRef = doc(db, 'users', username);
         getDoc(userDocRef).then(userDocSnap => {
           const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [] };
-          const updatedSessions = userData.sessions.map(s => 
-            s === session ? { ...s, exercises: s.exercises.map((e, i) => i === index ? { ...e, [field]: value } : e) } : s
+          const updatedSessions = userData.sessions.map(s =>
+            s === session ? { ...s, exercises: s.exercises.map((e, i) => i === index ? { ...e, ...newState[index] } : e) } : s
           );
           updateDoc(userDocRef, { sessions: updatedSessions });
         });
@@ -118,7 +178,7 @@ function Session() {
       const userDocRef = doc(db, 'users', username);
       const userDocSnap = await getDoc(userDocRef);
       const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [], history: [] };
-      const totalCalories = session.exercises.reduce((total, exercise, index) => 
+      const totalCalories = session.exercises.reduce((total, exercise, index) =>
         total + calculateCalories({ ...exercise, ...exerciseStates[index] }), 0
       );
       const newHistoryEntry = {
@@ -153,7 +213,7 @@ function Session() {
   };
 
   const calculateTotalCheckedCalories = () => {
-    return session.exercises.reduce((total, exercise, index) => 
+    return session.exercises.reduce((total, exercise, index) =>
       total + calculateCalories({ ...exercise, ...exerciseStates[index] }), 0
     );
   };

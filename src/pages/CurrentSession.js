@@ -50,13 +50,22 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     const username = user.displayName || user.email.split('@')[0];
     const updatedSession = { ...currentSession };
     const exercise = updatedSession.exercises[index];
-    if (exercise.type === 'cardio' && field === 'duration') {
-      updatedSession.exercises[index].duration = Math.max(0, (exercise.duration || 0) + delta);
-    } else if (exercise.type !== 'cardio' && field === 'weight') {
+    if (exercise.type !== 'cardio' && field === 'weight') {
       updatedSession.exercises[index].weight = Math.max(0, (exercise.weight || 0) + delta);
     } else {
       updatedSession.exercises[index][field] = Math.max(0, (exercise[field] || 0) + delta);
     }
+    const updatedSessions = [...sessions];
+    updatedSessions[sessions.length - 1] = updatedSession;
+    setSessions(updatedSessions);
+    updateSessionInFirestore(username, updatedSessions);
+  };
+
+  const updateDuration = (index, value) => {
+    if (!currentSession) return;
+    const username = user.displayName || user.email.split('@')[0];
+    const updatedSession = { ...currentSession };
+    updatedSession.exercises[index].duration = Math.max(0, parseInt(value) || 0);
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
@@ -105,35 +114,48 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
                 <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps, ${exercise.weight} kg`}</p>
                 <div className='exercise-controls'>
                   {exercise.type === 'cardio' ? (
-                    <>
-                      <button onClick={() => updateRepsLaps(index, 'duration', -1)}><MinusCircle size={15} /></button>
-                      <span>Sec</span>
-                      <button onClick={() => updateRepsLaps(index, 'duration', 1)}><PlusCircle size={15} /></button>
-                      <span> </span>
-                      <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
-                      <span>Laps</span>
-                      <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
-                    </>
+                    <div className='counter-row'>
+                      <div>
+                        <span>Duration: </span>
+                        <input
+                          type="number"
+                          value={exercise.duration || 0}
+                          onChange={(e) => updateDuration(index, e.target.value)}
+                          min="0"
+                          className="duration-input"
+                        />
+                        <span> sec</span>
+                      </div>
+                      <div>
+                        <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
+                        <span>Laps</span>
+                        <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
+                      </div>
+                    </div>
                   ) : (
-                    <>
-                      <button onClick={() => updateRepsLaps(index, 'reps', -1)}><MinusCircle size={15} /></button>
-                      <span>Reps</span>
-                      <button onClick={() => updateRepsLaps(index, 'reps', 1)}><PlusCircle size={15} /></button>
-                      <span> </span>
-                      <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
-                      <span>Laps</span>
-                      <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
-                      <span> </span>
-                      <input
-                        type="range"
-                        min="0"
-                        max="200"
-                        value={exercise.weight || 0}
-                        onChange={(e) => updateWeight(index, e.target.value)}
-                        className="weight-slider"
-                      />
-                      <span> Weight: {exercise.weight} kg </span>
-                    </>
+                    <div className='counter-row'>
+                      <div>
+                        <button onClick={() => updateRepsLaps(index, 'reps', -1)}><MinusCircle size={15} /></button>
+                        <span>Reps</span>
+                        <button onClick={() => updateRepsLaps(index, 'reps', 1)}><PlusCircle size={15} /></button>
+                      </div>
+                      <div>
+                        <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
+                        <span>Laps</span>
+                        <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
+                      </div>
+                      <div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="200"
+                          value={exercise.weight || 0}
+                          onChange={(e) => updateWeight(index, e.target.value)}
+                          className="weight-slider"
+                        />
+                        <span> Weight: {exercise.weight} kg </span>
+                      </div>
+                    </div>
                   )}
                 </div>
                 <div className='bottom-controls'>

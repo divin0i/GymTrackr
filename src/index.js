@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Options from './pages/option';
 import Session from './pages/session';
 import Home from './pages/home';
+import Settings from './pages/settings';
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -108,6 +109,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Session />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <Settings />
       </ProtectedRoute>
     )
   },

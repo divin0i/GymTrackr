@@ -90,6 +90,11 @@
   color: #ffffff;
 }
 
+.checklist-item.completed {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
 .checklist-item p {
   margin: 5px 0;
   font-size: 17px;
@@ -98,6 +103,10 @@
 }
 
 .checklist-item.expanded p {
+  color: #ffffff;
+}
+
+.checklist-item.completed p {
   color: #ffffff;
 }
 
@@ -160,6 +169,16 @@
 .trapezium-timer span {
   color: #ffffff;
   font-weight: bold;
+}
+
+.trapezium-timer .finish-message {
+  animation: celebrate 1.5s ease-in-out infinite;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: #ffd700; }
+  100% { transform: scale(1); }
 }
 
 .trapezium-timer input {

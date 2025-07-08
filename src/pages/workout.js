@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './workout.css';
-import { ChevronLeft, Plus, Trash2, PlusCircle, MinusCircle } from 'react-feather';
+import { ChevronLeft, Plus } from 'react-feather';
 import logo from '../Assets/logo.png';
 import Cardio from '../Assets/cardio.png';
 import Chest from '../Assets/chest.png';
@@ -44,56 +44,6 @@ function Workout() {
     navigate(`/${type.toLowerCase()}-exercise`);
   };
 
-  const currentSession = sessions.length > 0 ? sessions[sessions.length - 1] : null;
-
-  const addExerciseToSession = () => {
-    if (!user || !selectedExercise || !currentSession) return;
-    const username = user.displayName || user.email.split('@')[0];
-    const exercise = exercises.find(e => e.id === selectedExercise);
-    if (exercise) {
-      const updatedSession = {
-        ...currentSession,
-        exercises: [
-          ...currentSession.exercises,
-          { id: exercise.id, name: exercise.name, reps: exercise.type === 'cardio' ? 0 : 0, duration: exercise.type === 'cardio' ? 0 : undefined, laps: 0, videoUrl: exercise.videoUrl, minCalories: exercise.minCalories || 10, type: exercise.type }
-        ]
-      };
-      const updatedSessions = [...sessions];
-      updatedSessions[sessions.length - 1] = updatedSession;
-      setSessions(updatedSessions);
-      setShowDropdown(false);
-      setSelectedExercise('');
-      updateSessionInFirestore(username, updatedSessions);
-    }
-  };
-
-  const updateRepsLaps = (index, field, delta) => {
-    if (!currentSession) return;
-    const username = user.displayName || user.email.split('@')[0];
-    const updatedSession = { ...currentSession };
-    const exercise = updatedSession.exercises[index];
-    if (exercise.type === 'cardio' && field === 'reps') {
-      updatedSession.exercises[index].duration = Math.max(0, (exercise.duration || 0) + delta);
-    } else {
-      updatedSession.exercises[index][field] = Math.max(0, (exercise[field] || 0) + delta);
-    }
-    const updatedSessions = [...sessions];
-    updatedSessions[sessions.length - 1] = updatedSession;
-    setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
-  };
-
-  const removeExercise = (index) => {
-    if (!currentSession) return;
-    const username = user.displayName || user.email.split('@')[0];
-    const updatedSession = { ...currentSession };
-    updatedSession.exercises.splice(index, 1);
-    const updatedSessions = [...sessions];
-    updatedSessions[sessions.length - 1] = updatedSession;
-    setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
-  };
-
   const updateSessionInFirestore = async (username, updatedSessions) => {
     const userDocRef = doc(db, 'users', username);
     await updateDoc(userDocRef, { sessions: updatedSessions });
@@ -115,11 +65,13 @@ function Workout() {
   };
 
   const calculateTotalCalories = () => {
+    const currentSession = sessions.length > 0 ? sessions[sessions.length - 1] : null;
     if (!currentSession) return 0;
     return currentSession.exercises.reduce((total, exercise) => total + calculateCalories(exercise), 0);
   };
 
   const startSession = () => {
+    const currentSession = sessions.length > 0 ? sessions[sessions.length - 1] : null;
     if (currentSession && currentSession.exercises.length > 0) {
       navigate('/session', { state: { session: currentSession } });
     }
@@ -138,76 +90,18 @@ function Workout() {
           </a>
         </div>
         <div className='workout-sessions'>
-          <div className='workout-sessions-title' onClick={() => setShowCurrentSession(!showCurrentSession)}>
-            <p className='sess-title'>Current Session</p>
-          </div>
-          <div className={showCurrentSession ? 'expandable-section active' : 'expandable-section'}>
-            {currentSession ? (
-              <div>
-                <h3>Session Date: {new Date(currentSession.date).toLocaleString()}</h3>
-                {currentSession.exercises.map((exercise, index) => (
-                  <div key={index} className='exercise-item'>
-                    <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
-                    <div className='exercise-controls'>
-                      {exercise.type === 'cardio' ? (
-                        <>
-                          <button onClick={() => updateRepsLaps(index, 'duration', -1)}><MinusCircle size={15} /></button>
-                          <span>Sec</span>
-                          <button onClick={() => updateRepsLaps(index, 'duration', 1)}><PlusCircle size={15} /></button>
-                          <span> </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
-                          <span>Laps</span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
-                        </>
-                      ) : (
-                        <>
-                          <button onClick={() => updateRepsLaps(index, 'reps', -1)}><MinusCircle size={15} /></button>
-                          <span>Reps</span>
-                          <button onClick={() => updateRepsLaps(index, 'reps', 1)}><PlusCircle size={15} /></button>
-                          <span> </span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', -1)}><MinusCircle size={15} /></button>
-                          <span>Laps</span>
-                          <button onClick={() => updateRepsLaps(index, 'laps', 1)}><PlusCircle size={15} /></button>
-                        </>
-                      )}
-                    </div>
-                    <div className='bottom-controls'>
-                      <div>
-                        <a href={exercise.videoUrl} target="_blank" rel="noopener noreferrer" className="tutorial-link">Tutorial</a>
-                      </div>
-                      <div className='trash-btn'>
-                        <Trash2 size={18} color="#8b0000" onClick={() => removeExercise(index)} />
-                      </div>
-                    </div>
-                    <span className='calorie-info'>Calories: {calculateCalories(exercise)} kcal</span>
-                  </div>
-                ))}
-                <div className='total-calories'>
-                  <span>Total Calories: {calculateTotalCalories()} kcal</span>
-                </div>
-                <div className='session-actions'>
-                  <button className='add-btn' onClick={() => setShowDropdown(!showDropdown)}>
-                    <Plus size={18} style={{ translate: '-4px 3px' }} color="#000000" />
-                    Add Exercise
-                  </button>
-                  {showDropdown && (
-                    <div className='dropdown'>
-                      <select value={selectedExercise} onChange={(e) => setSelectedExercise(e.target.value)}>
-                        <option value="">Select Exercise</option>
-                        {exercises.map((exercise) => (
-                          <option key={exercise.id} value={exercise.id}>{exercise.name}</option>
-                        ))}
-                      </select>
-                      <button onClick={addExerciseToSession}>Add</button>
-                    </div>
-                  )}
-                  <button className='start-btn' onClick={startSession}>Start Session</button>
-                </div>
-              </div>
-            ) : (
-              <p>No current session available.</p>
-            )}
-          </div>
+          <CurrentSession
+            sessions={sessions}
+            setSessions={setSessions}
+            exercises={exercises}
+            user={user}
+            updateSessionInFirestore={updateSessionInFirestore}
+            calculateCalories={calculateCalories}
+            calculateTotalCalories={calculateTotalCalories}
+            startSession={startSession}
+            showCurrentSession={showCurrentSession}
+            setShowCurrentSession={setShowCurrentSession}
+          />
           <div className='workout-sessions-title' onClick={() => setShowHistory(!showHistory)}>
             <p className='sess-title'>History</p>
           </div>
