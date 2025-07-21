@@ -26,12 +26,17 @@ function Workout() {
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        const username = user.displayName || user.email.split('@')[0];
+        const username = user.displayName || user.email?.split('@')[0];
         const userDocRef = doc(db, 'users', username);
         const userDocSnap = await getDoc(userDocRef);
         const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [], height: 0, weight: 0, age: 0, gender: '' };
+        // Name sessions if not already named
+        const namedSessions = (userData.sessions || []).map(session => ({
+          ...session,
+          name: session.name || `Session - ${new Date(session.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
+        }));
         setUserData(userData);
-        setSessions(userData.sessions || []);
+        setSessions(namedSessions);
 
         const exerciseSnapshot = await getDocs(collection(db, 'exercises'));
         const exerciseList = exerciseSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

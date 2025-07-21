@@ -10,10 +10,10 @@ function History({ sessions, setSessions, user, updateSessionInFirestore, exerci
   const reuseSession = (session) => {
     if (user) {
       const username = user.displayName || user.email.split('@')[0];
-      const updatedSessions = [...sessions, { ...session, date: new Date().toISOString() }];
+      const updatedSessions = [...sessions, { ...session, date: new Date().toISOString(), name: `Session - ${new Date().toLocaleString()}` }];
       setSessions(updatedSessions);
       updateSessionInFirestore(username, updatedSessions);
-      navigate('/session', { state: { session: { ...session, date: new Date().toISOString() } } });
+      navigate('/session', { state: { session: { ...session, date: new Date().toISOString(), name: `Session - ${new Date().toLocaleString()}` } } });
     }
   };
 
@@ -31,7 +31,7 @@ function History({ sessions, setSessions, user, updateSessionInFirestore, exerci
       {sessions.length > 0 ? (
         sessions.map((session, index) => (
           <div key={index} className='history-item'>
-            <h3>Session Date: {new Date(session.date).toLocaleString()}</h3>
+            <h3>Session Name: {session.name || `Session - ${new Date(session.date).toLocaleString()}`}</h3>
             {session.exercises.map((exercise, exIndex) => (
               <p key={exIndex}>
                 {exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps, ${exercise.weight} kg`}

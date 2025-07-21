@@ -5,14 +5,37 @@ import './CurrentSession.css';
 
 function CurrentSession({ sessions, setSessions, exercises, user, updateSessionInFirestore, calculateCalories, calculateTotalCalories, startSession, showCurrentSession, setShowCurrentSession }) {
   const navigate = useNavigate();
+  const [localShowCurrentSession, setLocalShowCurrentSession] = useState(showCurrentSession || false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState('');
   const [selectedWeight, setSelectedWeight] = useState(0);
   const [selectedDuration, setSelectedDuration] = useState(0);
   const currentSession = sessions.length > 0 ? sessions[sessions.length - 1] : null;
 
+  useEffect(() => {
+    if (typeof setShowCurrentSession !== 'function') {
+      console.error('setShowCurrentSession is not a function, using local state:', setShowCurrentSession);
+    } else {
+      setLocalShowCurrentSession(showCurrentSession);
+    }
+  }, [showCurrentSession, setShowCurrentSession]);
+
   const addExerciseToSession = () => {
-    if (!user || !selectedExercise || !currentSession) return;
+    if (!user || !selectedExercise || !currentSession) {
+      // If no current session, create a new one with a timestamp
+      if (!currentSession && user) {
+        const username = user.displayName || user.email.split('@')[0];
+        const newSession = {
+          date: new Date().toISOString(),
+          name: `Session - ${new Date().toLocaleString()}`,
+          exercises: []
+        };
+        const updatedSessions = [...sessions, newSession];
+        setSessions(updatedSessions);
+        updateSessionInFirestore(username, updatedSessions);
+      }
+      return;
+    }
     const username = user.displayName || user.email.split('@')[0];
     const exercise = exercises.find(e => e.id === selectedExercise);
     if (exercise) {
@@ -21,9 +44,9 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
         name: exercise.name,
         reps: exercise.type === 'cardio' ? 0 : 0,
         laps: 0,
-        weight: exercise.type === 'cardio' ? 0 : selectedWeight,
-        duration: exercise.type === 'cardio' ? selectedDuration : 0,
-        videoUrl: exercise.videoUrl,
+        weight: exercise.type === 'cardio' ? 0 : (selectedWeight || 0), // Default to 0 if undefined
+        duration: exercise.type === 'cardio' ? (selectedDuration || 0) : 0, // Default to 0 if undefined
+        videoUrl: exercise.videoUrl || '',
         minCalories: exercise.minCalories || 10,
         type: exercise.type,
         met: exercise.met || 3,
@@ -75,7 +98,7 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     if (!currentSession) return;
     const username = user.displayName || user.email.split('@')[0];
     const updatedSession = { ...currentSession };
-    updatedSession.exercises[index].weight = Math.max(0, parseInt(value));
+    updatedSession.exercises[index].weight = Math.max(0, parseInt(value) || 0);
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
@@ -101,13 +124,13 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
 
   return (
     <div className='workout-sessions'>
-      <div className='workout-sessions-title' onClick={() => setShowCurrentSession(!showCurrentSession)}>
+      <div className='workout-sessions-title' onClick={() => setLocalShowCurrentSession(!localShowCurrentSession)}>
         <p className='sess-title'>Current Session</p>
       </div>
-      <div className={showCurrentSession ? 'expandable-section active' : 'expandable-section'}>
+      <div className={localShowCurrentSession ? 'expandable-section active' : 'expandable-section'}>
         {currentSession ? (
           <div>
-            <h3>Session Date: {new Date(currentSession.date).toLocaleString()}</h3>
+            <h3>Session Name: {currentSession.name}</h3>
             {currentSession.exercises.map((exercise, index) => (
               <div key={index} className='exercise-item'>
                 <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps, ${exercise.weight} kg`}</p>
