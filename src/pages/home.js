@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
-import { ChevronLeft, User, Edit2, Trash2, Save, Settings, LogOut } from 'react-feather';
+import { ChevronLeft, User, Edit2, Trash2, Save, Settings, LogOut, Plus } from 'react-feather';
 import logo from '../Assets/logo.png';
 import { db, auth } from '../firebase/db';
 import { doc, getDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
@@ -296,6 +296,11 @@ function Home() {
             startSession={startSession}
           />
           <button className='workout-btn' onClick={() => navigate('/workout')}>Workout</button>
+        </div>
+        <div className='add-exercise-btn'>
+          <button onClick={() => navigate('/add-exercise')}>
+            <Plus size={16} /> Add Custom Exercise
+          </button>
         </div>
       </div>
     </div>

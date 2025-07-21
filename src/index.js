@@ -16,6 +16,7 @@ import Options from './pages/option';
 import Session from './pages/session';
 import Home from './pages/home';
 import Settings from './pages/settings';
+import AddExercise from './pages/addex';
 
 const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -125,6 +126,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Admin />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/add-exercise",
+    element: (
+      <ProtectedRoute>
+        <AddExercise />
       </ProtectedRoute>
     )
   }

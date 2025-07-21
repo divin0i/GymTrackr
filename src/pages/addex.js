@@ -6,6 +6,7 @@ import './addex.css';
 function AddExercise({ onExerciseAdded }) {
   const [name, setName] = useState('');
   const [type, setType] = useState('cardio');
+  const [muscleGroup, setMuscleGroup] = useState('chest'); // Default to chest
   const [minCalories, setMinCalories] = useState(0);
   const [duration, setDuration] = useState(5); // Default 5 minutes for cardio
   const [met, setMet] = useState(6.0); // Default MET for cardio
@@ -21,6 +22,7 @@ function AddExercise({ onExerciseAdded }) {
     const newExercise = {
       name,
       type,
+      muscleGroup: [muscleGroup], // Store as an array to match existing JSON structure
       minCalories: parseInt(minCalories),
       ...(type === 'cardio' ? { duration: parseInt(duration), met: parseFloat(met) } : {}),
       id: name.toLowerCase().replace(/ /g, '-'), // Generate ID from name
@@ -32,6 +34,7 @@ function AddExercise({ onExerciseAdded }) {
       setMinCalories(0);
       setDuration(5);
       setMet(6.0);
+      setMuscleGroup('chest');
       setError('');
       if (onExerciseAdded) onExerciseAdded(newExercise); // Callback to refresh Home
       alert('Exercise added successfully!');
@@ -64,6 +67,20 @@ function AddExercise({ onExerciseAdded }) {
           >
             <option value="cardio">Cardio</option>
             <option value="strength">Strength</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="muscle-group">Muscle Group:</label>
+          <select
+            id="muscle-group"
+            value={muscleGroup}
+            onChange={(e) => setMuscleGroup(e.target.value)}
+          >
+            <option value="chest">Chest</option>
+            <option value="legs">Legs</option>
+            <option value="back">Back</option>
+            <option value="arms">Arms</option>
+            <option value="core">Core</option>
           </select>
         </div>
         <div className="form-group">
