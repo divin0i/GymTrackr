@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './workout.css';
-import { ChevronLeft, Plus } from 'react-feather';
+import { ChevronLeft, LogOut, Plus, Settings, User } from 'react-feather';
 import logo from '../Assets/logo.png';
 import Cardio from '../Assets/cardio.png';
 import Chest from '../Assets/chest.png';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase/db';
 import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import CurrentSession from './CurrentSession';
+import History from './History';
 
 function Workout() {
   const navigate = useNavigate();
@@ -77,17 +78,34 @@ function Workout() {
     }
   };
 
+  const handleLogout = () => {
+    auth.signOut();
+    navigate('/login');
+  };
+
   return (
     <div className='workout-page'>
       <div className='phone-container'>
         <div className='phone-bar'>
           <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
           <div className='phone-bar'>
-            <h1 className='top_bar'></h1>
+            <a href='/home' className='logo-link'>
+              <img src={logo} alt='GymTrakr Logo' className='logo' />
+            </a>
           </div>
-          <a href='/home' className='logo-link'>
-            <img src={logo} alt='GymTrakr Logo' className='logo' />
-          </a>
+          <div className='user-dropdown'>
+            <User className='user-icon' onClick={() => setShowDropdown(!showDropdown)} />
+            {showDropdown && (
+              <div className='dropdown-menu'>
+                <div className='dropdown-item' onClick={() => { navigate('/settings'); setShowDropdown(false); }}>
+                  <Settings size={16} /> Settings
+                </div>
+                <div className='dropdown-item' onClick={handleLogout}>
+                  <LogOut size={16} /> Logout
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <div className='workout-sessions'>
           <CurrentSession
@@ -106,21 +124,7 @@ function Workout() {
             <p className='sess-title'>History</p>
           </div>
           <div className={showHistory ? 'expandable-section active' : 'expandable-section'}>
-            {sessions.length > 0 ? (
-              sessions.map((session, index) => (
-                <div key={index}>
-                  <h3>Session Date: {new Date(session.date).toLocaleString()}</h3>
-                  {session.exercises.map((exercise, exIndex) => (
-                    <div key={exIndex}>
-                      <p>{exercise.name}: {exercise.type === 'cardio' ? `${exercise.duration} sec, ${exercise.laps} laps` : `${exercise.reps} reps, ${exercise.laps} laps`}</p>
-                      <a href={exercise.videoUrl} target="_blank" rel="noopener noreferrer" className="tutorial-link">Tutorial</a>
-                    </div>
-                  ))}
-                </div>
-              ))
-            ) : (
-              <p>No history available.</p>
-            )}
+            <History sessions={sessions} setSessions={setSessions} user={user} updateSessionInFirestore={updateSessionInFirestore} exercises={exercises} />
           </div>
         </div>
         <div className='workout-content'>

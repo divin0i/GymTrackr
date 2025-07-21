@@ -13,8 +13,14 @@ function ExerciseList({ type }) {
 
   useEffect(() => {
     const fetchExercises = async () => {
-      // Filter by muscle group instead of type for category pages like /chest-exercise
-      const q = query(collection(db, 'exercises'), where('muscleGroup', 'array-contains', type.toLowerCase()));
+      let q;
+      if (type.toLowerCase() === 'cardio') {
+        // Filter by type for cardio exercises
+        q = query(collection(db, 'exercises'), where('type', '==', 'cardio'));
+      } else {
+        // Filter by muscle group for other categories (e.g., chest, legs)
+        q = query(collection(db, 'exercises'), where('muscleGroup', 'array-contains', type.toLowerCase()));
+      }
       const querySnapshot = await getDocs(q);
       const exerciseList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setExercises(exerciseList);

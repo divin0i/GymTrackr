@@ -13,8 +13,11 @@ function Session() {
   const [timerActive, setTimerActive] = useState({});
   const [timeLeft, setTimeLeft] = useState({});
   const [countdown, setCountdown] = useState({});
+  const [breatherActive, setBreatherActive] = useState({});
+  const [breatherTimeLeft, setBreatherTimeLeft] = useState({});
   const user = auth.currentUser;
   const timerRefs = useRef({});
+  const breatherRefs = useRef({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,11 +29,12 @@ function Session() {
         const currentSession = userData.sessions.find(s => s === session) || session;
         const initialStates = {};
         currentSession.exercises.forEach((exercise, index) => {
+          const durationInSeconds = exercise.duration || 0; // Ensure duration is in seconds
           initialStates[index] = {
             reps: exercise.reps || 0,
             laps: exercise.laps || 1,
             weight: exercise.weight || 0,
-            duration: exercise.duration || 0,
+            duration: durationInSeconds,
             isExpanded: exercise.isExpanded || false
           };
         });
@@ -49,49 +53,61 @@ function Session() {
           });
           return newCountdown;
         });
+        setBreatherTimeLeft(prev => {
+          const newBreather = {};
+          currentSession.exercises.forEach((_, index) => {
+            newBreather[index] = exerciseStates[index]?.duration ? Math.floor(exerciseStates[index].duration / 2) : 0;
+          });
+          return newBreather;
+        });
       }
     };
     fetchData();
   }, [session, user]);
 
-  // Real-time countdown effect
+  // Countdown effect
   useEffect(() => {
     const timers = {};
     Object.keys(countdown).forEach(index => {
       if (countdown[index] > 0) {
-        console.log(`[Countdown] Starting for index ${index}: ${countdown[index]}s`);
         timers[index] = setInterval(() => {
           setCountdown(prev => {
             const newCountdown = { ...prev, [index]: prev[index] - 1 };
-            console.log(`[Countdown] Attempting decrement for index ${index}, Time Left: ${newCountdown[index]}s`);
             if (newCountdown[index] <= 0) {
-              console.log(`[Countdown] Finished for index ${index}, Starting timer`);
               setTimerActive(prev => ({ ...prev, [index]: true }));
               setCountdown(prev => ({ ...prev, [index]: 0 }));
-              startDurationTimer(index); // Start timer after countdown
+              startDurationTimer(index);
             }
             return newCountdown;
           });
         }, 1000);
       }
     });
-    return () => Object.values(timers).forEach(timer => clearInterval(timer)); // Cleanup
+    return () => Object.values(timers).forEach(timer => clearInterval(timer));
   }, [countdown]);
 
-  // Function to start and manage duration timer
+  // Duration timer
   const startDurationTimer = (index) => {
     if (timerActive[index] && timeLeft[index] > 0 && !timerRefs.current[index]) {
-      console.log(`[Timer] Starting for index ${index}, Initial Time: ${timeLeft[index]}s`);
       timerRefs.current[index] = setInterval(() => {
         setTimeLeft(prev => {
           const currentTime = prev[index] || 0;
           const newTime = currentTime - 1;
-          console.log(`[Timer] Attempting decrement for index ${index}, Current Time: ${currentTime}s, New Time: ${newTime}s, Active: ${timerActive[index]}`);
           if (newTime <= 0) {
-            console.log(`[Timer] Finished for index ${index}, Time Left: 0s`);
-            clearInterval(timerRefs.current[index]);
-            timerRefs.current[index] = null;
-            setTimerActive(prev => ({ ...prev, [index]: false }));
+            const laps = exerciseStates[index]?.laps || 0;
+            if (laps > 1) {
+              updateExercise(index, 'laps', laps - 1);
+              setTimeLeft(prev => ({ ...prev, [index]: exerciseStates[index].duration || 0 }));
+              setTimerActive(prev => ({ ...prev, [index]: false }));
+              clearInterval(timerRefs.current[index]);
+              timerRefs.current[index] = null;
+              startBreatherTimer(index);
+            } else if (laps === 1) {
+              updateExercise(index, 'laps', 0);
+              setTimerActive(prev => ({ ...prev, [index]: false }));
+              clearInterval(timerRefs.current[index]);
+              timerRefs.current[index] = null;
+            }
           }
           updateExercise(index, 'duration', newTime);
           return { ...prev, [index]: newTime };
@@ -100,28 +116,55 @@ function Session() {
     }
   };
 
-  // Real-time duration timer effect (triggers start)
+  // Breather timer
+  const startBreatherTimer = (index) => {
+    if (!breatherActive[index] && breatherTimeLeft[index] > 0 && !breatherRefs.current[index]) {
+      setBreatherActive(prev => ({ ...prev, [index]: true }));
+      breatherRefs.current[index] = setInterval(() => {
+        setBreatherTimeLeft(prev => {
+          const currentBreather = prev[index] || 0;
+          const newBreather = currentBreather - 1;
+          if (newBreather <= 0) {
+            setBreatherActive(prev => ({ ...prev, [index]: false }));
+            clearInterval(breatherRefs.current[index]);
+            breatherRefs.current[index] = null;
+            setTimerActive(prev => ({ ...prev, [index]: true }));
+            startDurationTimer(index);
+          }
+          return { ...prev, [index]: newBreather };
+        });
+      }, 1000);
+    }
+  };
+
+  // Real-time timer effects
   useEffect(() => {
     Object.keys(timerActive).forEach(index => {
-      if (timerActive[index] && timeLeft[index] > 0) {
-        startDurationTimer(index);
-      } else if (timeLeft[index] <= 0 && timerRefs.current[index]) {
-        console.log(`[Timer] Clearing interval for index ${index} due to time expiry`);
+      if (timerActive[index] && timeLeft[index] > 0) startDurationTimer(index);
+      else if (timeLeft[index] <= 0 && timerRefs.current[index]) {
         clearInterval(timerRefs.current[index]);
         timerRefs.current[index] = null;
       }
     });
   }, [timerActive, timeLeft]);
 
+  useEffect(() => {
+    Object.keys(breatherActive).forEach(index => {
+      if (breatherActive[index] && breatherTimeLeft[index] > 0) startBreatherTimer(index);
+      else if (breatherTimeLeft[index] <= 0 && breatherRefs.current[index]) {
+        clearInterval(breatherRefs.current[index]);
+        breatherRefs.current[index] = null;
+      }
+    });
+  }, [breatherActive, breatherTimeLeft]);
+
   const pauseTimer = (index) => {
-    console.log(`[Timer] Pausing for index ${index}, Time Left: ${timeLeft[index]}s`);
     clearInterval(timerRefs.current[index]);
     timerRefs.current[index] = null;
     setTimerActive(prev => ({ ...prev, [index]: false }));
   };
 
   const resumeTimer = (index) => {
-    console.log(`[Timer] Resuming for index ${index}, Time Left: ${timeLeft[index]}s`);
     setTimerActive(prev => ({ ...prev, [index]: true }));
     startDurationTimer(index);
   };
@@ -218,6 +261,50 @@ function Session() {
     );
   };
 
+  // Calculate progress for circular animation
+  const getProgress = (index) => {
+    const totalDuration = exerciseStates[index]?.duration || 1;
+    const currentTime = timeLeft[index] || 0;
+    return totalDuration > 0 ? 1 - (currentTime / totalDuration) : 0;
+  };
+
+  // Celebration animation when all exercises are checked
+  useEffect(() => {
+    const allChecked = session.exercises.every((_, index) => exerciseStates[index]?.isExpanded);
+    if (allChecked && session.exercises.length > 0) {
+      const timerContainer = document.querySelector('.trapezium-timer');
+      if (timerContainer) {
+        // Create and animate stars
+        for (let i = 0; i < 20; i++) {
+          const star = document.createElement('div');
+          star.className = 'celebration-star';
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.animationDelay = `${Math.random() * 1}s`; // Staggered start
+          timerContainer.appendChild(star);
+        }
+
+        // Remove stars and navigate after animation (3 seconds)
+        const animationTimeout = setTimeout(() => {
+          const stars = document.querySelectorAll('.celebration-star');
+          stars.forEach(star => star.remove());
+
+          if (user) {
+            const username = user.displayName || user.email.split('@')[0];
+            const userDocRef = doc(db, 'users', username);
+            getDoc(userDocRef).then(userDocSnap => {
+              const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [], history: [] };
+              const updatedSessions = userData.sessions.filter(s => s !== session);
+              updateDoc(userDocRef, { sessions: updatedSessions });
+            });
+          }
+          navigate('/workout');
+        }, 3000); // 3-second animation
+
+        return () => clearTimeout(animationTimeout);
+      }
+    }
+  }, [exerciseStates, session.exercises, user, navigate]);
+
   return (
     <div className='session-page'>
       <div className='phone-container'>
@@ -238,12 +325,18 @@ function Session() {
                   onChange={() => toggleExpand(index)}
                   className='checkbox'
                 />
-                <p>{exercise.name}: {exercise.type === 'cardio' ? `${Math.floor((exerciseStates[index]?.duration || 0) / 60)} min ${exerciseStates[index]?.duration % 60} sec, ${exerciseStates[index]?.laps || 0} laps` : `${exerciseStates[index]?.reps || 0} reps, ${exerciseStates[index]?.laps || 0} laps, ${exerciseStates[index]?.weight || 0} kg`}</p>
+                <p>
+                  {exercise.name}: {exercise.type === 'cardio' 
+                    ? `${Math.floor(exerciseStates[index]?.duration / 60 || 0)} min ${(exerciseStates[index]?.duration % 60).toString().padStart(2, '0')} sec, ${exerciseStates[index]?.laps || 0} laps`
+                    : `${exerciseStates[index]?.reps || 0} reps, ${exerciseStates[index]?.laps || 0} laps, ${exerciseStates[index]?.weight || 0} kg`}
+                </p>
               </div>
               {exercise.type === 'cardio' && exerciseStates[index]?.isExpanded && (
                 <div className='trapezium-timer'>
                   {countdown[index] > 0 ? (
                     <span className="timer-text">Starting in: {countdown[index]}s</span>
+                  ) : breatherActive[index] && breatherTimeLeft[index] > 0 ? (
+                    <span className="timer-text">Breather: {Math.floor(breatherTimeLeft[index] / 60)}:{(breatherTimeLeft[index] % 60).toString().padStart(2, '0')}</span>
                   ) : (
                     <>
                       <span className="timer-text">Time Left: {Math.floor((timeLeft[index] || 0) / 60)}:{(timeLeft[index] % 60).toString().padStart(2, '0')}</span>

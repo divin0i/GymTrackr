@@ -544,7 +544,7 @@
   margin-top: auto;
 }
 
-.workout-btn, .session-btn {
+.workout-btn, .session-btn, .add-exercise-btn {
   padding: 10px;
   background-color: #184d8b !important;
   color: #ffffff;

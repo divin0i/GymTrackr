@@ -249,3 +249,56 @@
   color: #28a745;
   font-size: 16px;
 }
+/* Existing styles... */
+
+.progress-circle-container {
+  position: relative;
+  display: inline-block;
+}
+
+.progress-circle {
+  transition: stroke-dasharray 0.1s linear; /* Smooth transition for real-time updates */
+}
+
+.timer-text {
+  font-size: 1em;
+  color: #333;
+}
+
+.progress-circle-container button {
+  margin-top: 10px;
+  display: block;
+}
+
+
+/* Existing styles... */
+
+.celebration-star {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffd700"><path d="M12 .587l3.668 7.431 8.332 1.151-6 5.873 1.417 8.278L12 18.799l-7.417 3.521L6 15.042l-6-5.873 8.332-1.151z"/></svg>') no-repeat center;
+  background-size: contain;
+  animation: flyUp 3s ease-out forwards;
+}
+
+@keyframes flyUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-100px) scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-150px) scale(2);
+  }
+}
+
+/* Ensure stars fit within trapezium-timer */
+.trapezium-timer {
+  position: relative;
+  overflow: visible; /* Allow stars to fly out */
+}

@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { PlusCircle, MinusCircle, Plus, Trash2 } from 'react-feather';
 import './CurrentSession.css';
 
-function CurrentSession({ sessions, setSessions, exercises, user, updateSessionInFirestore, calculateCalories, calculateTotalCalories, startSession }) {
+function CurrentSession({ sessions, setSessions, exercises, user, updateSessionInFirestore, calculateCalories, calculateTotalCalories, startSession, showCurrentSession, setShowCurrentSession }) {
   const navigate = useNavigate();
-  const [showCurrentSession, setShowCurrentSession] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState('');
   const [selectedWeight, setSelectedWeight] = useState(0);
@@ -210,7 +209,10 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
             </div>
           </div>
         ) : (
-          <p>No current session available.</p>
+          <div>
+            <p>No active session available.</p>
+            <button className='go-to-workout-btn' onClick={() => navigate('/workout')}>Go to Workout</button>
+          </div>
         )}
       </div>
     </div>

@@ -1,0 +1,37 @@
+.history-item {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.history-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.reuse-btn, .delete-btn {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reuse-btn {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.reuse-btn:hover {
+  background-color: #218838;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}

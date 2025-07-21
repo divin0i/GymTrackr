@@ -306,3 +306,32 @@
   color: #ffffff;
   font-weight: bold;
 }
+
+/* Existing styles... */
+
+.history-session-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.history-session-btn:hover {
+  background-color: #e0e0e0;
+  transition: 0.3s ease;
+}
+
+.history-session-btn h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.history-session-btn p {
+  margin: 2px 0;
+  font-size: 14px;
+}

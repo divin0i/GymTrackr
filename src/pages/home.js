@@ -21,7 +21,7 @@ function Home() {
   const user = auth.currentUser;
   const [userData, setUserData] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState("N/A"); // New state for real-time timer
+  const [timeRemaining, setTimeRemaining] = useState("N/A");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ function Home() {
         setHistory(userData.history || []);
         setSessions(userData.sessions || []);
         setCalorieObjective(userData.calorieObjective || 1000);
-        setCalorieObjectiveSetTime(userData.calorieObjectiveSetTime || new Date().toISOString()); // Default to now if not set
+        setCalorieObjectiveSetTime(userData.calorieObjectiveSetTime || new Date().toISOString());
         setUserData(userData);
 
         const exerciseSnapshot = await getDocs(collection(db, 'exercises'));
@@ -45,7 +45,6 @@ function Home() {
     fetchData();
   }, [user]);
 
-  // Real-time timer effect
   useEffect(() => {
     let timer;
     if (calorieObjectiveSetTime) {
@@ -62,16 +61,16 @@ function Home() {
           const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
           setTimeRemaining(`${diffHours}h ${diffMinutes}m ${diffSeconds}s`);
         }
-      }, 1000); // Update every second
+      }, 1000); // every second
     }
-    return () => clearInterval(timer); // Cleanup on unmount or dependency change
-  }, [calorieObjectiveSetTime]); // Re-run when calorieObjectiveSetTime changes
+    return () => clearInterval(timer);
+  }, [calorieObjectiveSetTime]); // Re-run when done
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCalorieObjectiveSetTime(prev => prev); // Trigger re-render to update clock
-    }, 1000); // Update every second
-    return () => clearInterval(timer); // Cleanup on unmount
+    }, 1000);
+    return () => clearInterval(timer);
   }, []);
 
   const addObjective = () => {
@@ -120,7 +119,7 @@ function Home() {
 
   const calculateCalories = (exercise) => {
     if (!exercise || !exercise.minCalories) return 0;
-    const userWeight = userData?.weight || 70; // Replace with actual user weight
+    const userWeight = userData?.weight || 70;
     if (exercise.type === 'cardio') {
       const met = exercise.met || 3;
       const durationMinutes = exercise.duration || 1;
@@ -155,7 +154,7 @@ function Home() {
   };
 
   const getTimeRemaining = () => {
-    return timeRemaining; // Return the real-time state value
+    return timeRemaining;
   };
 
   useEffect(() => {
@@ -297,9 +296,9 @@ function Home() {
           />
           <button className='workout-btn' onClick={() => navigate('/workout')}>Workout</button>
         </div>
-        <div className='add-exercise-btn'>
-          <button onClick={() => navigate('/add-exercise')}>
-            <Plus size={16} /> Add Custom Exercise
+        <div>
+          <button className='add-exercise-btn' onClick={() => navigate('/add-exercise')}>
+            Create Exercise
           </button>
         </div>
       </div>

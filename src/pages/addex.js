@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import { db } from '../firebase/db';
 import { collection, addDoc } from 'firebase/firestore';
 import './addex.css';
+import { ChevronLeft } from 'react-feather';
+import logo from '../Assets/logo.png';
+import { useNavigate } from 'react-router-dom';
+
 
 function AddExercise({ onExerciseAdded }) {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [type, setType] = useState('cardio');
-  const [muscleGroup, setMuscleGroup] = useState('chest'); // Default to chest
+  const [muscleGroup, setMuscleGroup] = useState('chest');
   const [minCalories, setMinCalories] = useState(0);
-  const [duration, setDuration] = useState(5); // Default 5 minutes for cardio
-  const [met, setMet] = useState(6.0); // Default MET for cardio
+  const [duration, setDuration] = useState(5);
+  const [met, setMet] = useState(6.0);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -25,18 +30,18 @@ function AddExercise({ onExerciseAdded }) {
       muscleGroup: [muscleGroup], // Store as an array to match existing JSON structure
       minCalories: parseInt(minCalories),
       ...(type === 'cardio' ? { duration: parseInt(duration), met: parseFloat(met) } : {}),
-      id: name.toLowerCase().replace(/ /g, '-'), // Generate ID from name
+      id: name.toLowerCase().replace(/ /g, '-'),
     };
 
     try {
       await addDoc(collection(db, 'exercises'), newExercise);
       setName('');
       setMinCalories(0);
-      setDuration(5);
+      setDuration(2);
       setMet(6.0);
       setMuscleGroup('chest');
       setError('');
-      if (onExerciseAdded) onExerciseAdded(newExercise); // Callback to refresh Home
+      if (onExerciseAdded) onExerciseAdded(newExercise);
       alert('Exercise added successfully!');
     } catch (error) {
       setError('Failed to add exercise: ' + error.message);
@@ -45,11 +50,20 @@ function AddExercise({ onExerciseAdded }) {
 
   return (
     <div className="add-exercise-container">
+        <div className='phone-bar'>
+          <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
+          <div className='phone-bar'>
+            <h1 className='top_bar'></h1>
+          </div>
+          <a href='/home' className='logo-link'>
+            <img src={logo} alt='GymTrakr Logo' className='logo' />
+          </a>
+        </div>
       <h2>Add Custom Exercise</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit} className="add-exercise-form">
         <div className="form-group">
-          <label htmlFor="exercise-name">Name:</label>
+          <label htmlFor="exercise-name">Name</label>
           <input
             type="text"
             id="exercise-name"
@@ -59,7 +73,7 @@ function AddExercise({ onExerciseAdded }) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="exercise-type">Type:</label>
+          <label htmlFor="exercise-type">Type</label>
           <select
             id="exercise-type"
             value={type}
@@ -70,7 +84,7 @@ function AddExercise({ onExerciseAdded }) {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="muscle-group">Muscle Group:</label>
+          <label htmlFor="muscle-group">Muscle Group</label>
           <select
             id="muscle-group"
             value={muscleGroup}
@@ -84,7 +98,7 @@ function AddExercise({ onExerciseAdded }) {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="min-calories">Minimum Calories:</label>
+          <label htmlFor="min-calories">Minimum Calories</label>
           <input
             type="number"
             id="min-calories"
@@ -97,17 +111,7 @@ function AddExercise({ onExerciseAdded }) {
         {type === 'cardio' && (
           <>
             <div className="form-group">
-              <label htmlFor="duration">Duration (minutes):</label>
-              <input
-                type="number"
-                id="duration"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                min="1"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="met">MET Value:</label>
+              <label htmlFor="met">MET Value (optional)</label>
               <input
                 type="number"
                 id="met"
@@ -120,6 +124,7 @@ function AddExercise({ onExerciseAdded }) {
           </>
         )}
         <button type="submit" className="add-button">Add Exercise</button>
+        <button type="button" className="cancel-button" onClick={() => navigate('/home')}>Cancel</button>
       </form>
     </div>
   );
