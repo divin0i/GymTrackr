@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import {React,  useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './session.css';
 import { ChevronLeft } from 'react-feather';
 import { db, auth } from '../firebase/db';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import logo from '../Assets/logo.png';
+import { LogOut, Settings, User } from 'react-feather';
 
 function Session() {
   const location = useLocation();
@@ -18,6 +20,7 @@ function Session() {
   const user = auth.currentUser;
   const timerRefs = useRef({});
   const breatherRefs = useRef({});
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -305,13 +308,35 @@ function Session() {
     }
   }, [exerciseStates, session.exercises, user, navigate]);
 
+  const handleLogout = () => {
+    auth.signOut();
+    navigate('/login');
+  };
+
   return (
     <div className='session-page'>
       <div className='phone-container'>
         <div className='phone-bar'>
-          <ChevronLeft className='chevron-icon' onClick={endSession} />
-          <div className='phone-bar'>
-            <h1 className='top_bar'></h1>
+          <div>
+            <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
+          </div>
+          <div>
+            <a href='/home' className='logo-link'>
+              <img src={logo} alt='GymTrakr Logo' className='logo' />
+            </a>
+          </div>
+          <div className='user-dropdown'>
+            <User className='user-icon' onClick={() => setShowDropdown(!showDropdown)} />
+            {showDropdown && (
+              <div className='dropdown-menu'>
+                <div className='dropdown-item' onClick={() => { navigate('/settings'); setShowDropdown(false); }}>
+                  <Settings size={16} /> Settings
+                </div>
+                <div className='dropdown-item' onClick={handleLogout}>
+                  <LogOut size={16} /> Logout
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className='session-content'>

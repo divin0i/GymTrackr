@@ -30,7 +30,6 @@ function Workout() {
         const userDocRef = doc(db, 'users', username);
         const userDocSnap = await getDoc(userDocRef);
         const userData = userDocSnap.exists() ? userDocSnap.data() : { sessions: [], height: 0, weight: 0, age: 0, gender: '' };
-        // Name sessions if not already named
         const namedSessions = (userData.sessions || []).map(session => ({
           ...session,
           name: session.name || `Session - ${new Date(session.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
@@ -92,8 +91,10 @@ function Workout() {
     <div className='workout-page'>
       <div className='phone-container'>
         <div className='phone-bar'>
-          <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
-          <div className='phone-bar'>
+          <div>
+            <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
+          </div>
+          <div>
             <a href='/home' className='logo-link'>
               <img src={logo} alt='GymTrakr Logo' className='logo' />
             </a>

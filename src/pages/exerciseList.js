@@ -3,6 +3,9 @@ import { db, auth } from '../firebase/db';
 import { collection, getDocs, query, where, deleteDoc, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore'; // Added setDoc
 import { X, ChevronLeft } from 'react-feather';
 import './exerciseList.css';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, Settings, User } from 'react-feather';
+import logo from '../Assets/logo.png';
 
 function ExerciseList({ type }) {
   const [exercises, setExercises] = useState([]);
@@ -10,6 +13,8 @@ function ExerciseList({ type }) {
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState('');
   const user = auth.currentUser;
+  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -178,20 +183,46 @@ function ExerciseList({ type }) {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      console.log('User logged out successfully');
+      alert('Logged out successfully!');
+    } catch (error) {
+      console.error('Failed to log out:', error);
+      alert('Failed to log out. Check console for details.');
+    }
+  }
+
   return (
     <div className='exerciseList-page'>
       <div className='phone-container'>
         <div className='phone-bar'>
-          <button className='back-btn' onClick={() => window.history.back()}>
-            <ChevronLeft className='chevron-icon' />
-          </button>
-          <div className='phone-bar'>
-            <h1 className='top_bar'></h1>
+          <div>
+            <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
+          </div>
+          <div>
+            <a href='/home' className='logo-link'>
+              <img src={logo} alt='GymTrakr Logo' className='logo' />
+            </a>
+          </div>
+          <div className='user-dropdown'>
+            <User className='user-icon' onClick={() => setShowDropdown(!showDropdown)} />
+            {showDropdown && (
+              <div className='dropdown-menu'>
+                <div className='dropdown-item' onClick={() => { navigate('/settings'); setShowDropdown(false); }}>
+                  <Settings size={16} /> Settings
+                </div>
+                <div className='dropdown-item' onClick={handleLogout}>
+                  <LogOut size={16} /> Logout
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className='exercise-actions'>
           <button onClick={handleAddToNewSession}>Add to New Session</button>
-          <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
+          <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)} style={{ width: '125px' }}>
             <option value="">Select Session</option>
             {sessions.map((session, index) => (
               <option key={index} value={session.date}>{session.name || new Date(session.date).toLocaleDateString()}</option>
