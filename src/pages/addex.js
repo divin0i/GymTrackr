@@ -6,7 +6,6 @@ import { ChevronLeft } from 'react-feather';
 import logo from '../Assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 
-
 function AddExercise({ onExerciseAdded }) {
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -27,9 +26,10 @@ function AddExercise({ onExerciseAdded }) {
     const newExercise = {
       name,
       type,
-      muscleGroup: [muscleGroup], // Store as an array to match existing JSON structure
+      muscleGroup: [muscleGroup],
       minCalories: parseInt(minCalories),
       ...(type === 'cardio' ? { duration: parseInt(duration), met: parseFloat(met) } : {}),
+      videoUrl: '', // Default empty video URL
       id: name.toLowerCase().replace(/ /g, '-'),
     };
 
@@ -37,12 +37,13 @@ function AddExercise({ onExerciseAdded }) {
       await addDoc(collection(db, 'exercises'), newExercise);
       setName('');
       setMinCalories(0);
-      setDuration(2);
+      setDuration(5);
       setMet(6.0);
       setMuscleGroup('chest');
       setError('');
       if (onExerciseAdded) onExerciseAdded(newExercise);
       alert('Exercise added successfully!');
+      navigate('/workout'); // Redirect after success
     } catch (error) {
       setError('Failed to add exercise: ' + error.message);
     }
@@ -50,15 +51,15 @@ function AddExercise({ onExerciseAdded }) {
 
   return (
     <div className="add-exercise-container">
+      <div className='phone-bar'>
+        <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
         <div className='phone-bar'>
-          <ChevronLeft className='chevron-icon' onClick={() => navigate(-1)} />
-          <div className='phone-bar'>
-            <h1 className='top_bar'></h1>
-          </div>
-          <a href='/home' className='logo-link'>
-            <img src={logo} alt='GymTrakr Logo' className='logo' />
-          </a>
+          <h1 className='top_bar'></h1>
         </div>
+        <a href='/home' className='logo-link'>
+          <img src={logo} alt='GymTrakr Logo' className='logo' />
+        </a>
+      </div>
       <h2>Add Custom Exercise</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit} className="add-exercise-form">
@@ -111,7 +112,18 @@ function AddExercise({ onExerciseAdded }) {
         {type === 'cardio' && (
           <>
             <div className="form-group">
-              <label htmlFor="met">MET Value (optional)</label>
+              <label htmlFor="duration">Duration (sec)</label>
+              <input
+                type="number"
+                id="duration"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                min="1"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="met">MET Value</label>
               <input
                 type="number"
                 id="met"
@@ -119,6 +131,7 @@ function AddExercise({ onExerciseAdded }) {
                 onChange={(e) => setMet(e.target.value)}
                 step="0.1"
                 min="1"
+                required
               />
             </div>
           </>

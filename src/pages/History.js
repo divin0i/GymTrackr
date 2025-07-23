@@ -3,6 +3,7 @@ import { Trash2, Play } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/db';
+import './History.css'
 
 function History({ sessions, setSessions, user, updateSessionInFirestore, exercises }) {
   const navigate = useNavigate();
@@ -39,11 +40,11 @@ function History({ sessions, setSessions, user, updateSessionInFirestore, exerci
               </p>
             ))}
             <div className='history-buttons'>
+              <button className='Hdelete-btn' onClick={() => deleteSession(index)}>
+                <Trash2 size={16} /> Delete
+              </button>
               <button className='reuse-btn' onClick={() => reuseSession(session)}>
                 <Play size={16} /> Reuse
-              </button>
-              <button className='delete-btn' onClick={() => deleteSession(index)}>
-                <Trash2 size={16} /> Delete
               </button>
             </div>
           </div>

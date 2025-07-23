@@ -21,50 +21,54 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
   }, [showCurrentSession, setShowCurrentSession]);
 
   const addExerciseToSession = () => {
-    if (!user || !selectedExercise || !currentSession) {
-      // If no current session, create a new one with a timestamp
-      if (!currentSession && user) {
-        const username = user.displayName || user.email.split('@')[0];
-        const newSession = {
-          date: new Date().toISOString(),
-          name: `Session - ${new Date().toLocaleString()}`,
-          exercises: []
-        };
-        const updatedSessions = [...sessions, newSession];
-        setSessions(updatedSessions);
-        updateSessionInFirestore(username, updatedSessions);
-      }
-      return;
-    }
+    if (!user || !selectedExercise) return;
     const username = user.displayName || user.email.split('@')[0];
     const exercise = exercises.find(e => e.id === selectedExercise);
-    if (exercise) {
-      const newExercise = {
-        id: exercise.id,
-        name: exercise.name,
-        reps: exercise.type === 'cardio' ? 0 : 0,
-        laps: 0,
-        weight: exercise.type === 'cardio' ? 0 : (selectedWeight || 0), // Default to 0 if undefined
-        duration: exercise.type === 'cardio' ? (selectedDuration || 0) : 0, // Default to 0 if undefined
-        videoUrl: exercise.videoUrl || '',
-        minCalories: exercise.minCalories || 10,
-        type: exercise.type,
-        met: exercise.met || 3,
-        sets: exercise.sets || 1
-      };
-      const updatedSession = {
-        ...currentSession,
-        exercises: [...currentSession.exercises, newExercise]
-      };
-      const updatedSessions = [...sessions];
-      updatedSessions[sessions.length - 1] = updatedSession;
-      setSessions(updatedSessions);
-      setShowDropdown(false);
-      setSelectedExercise('');
-      setSelectedWeight(0);
-      setSelectedDuration(0);
-      updateSessionInFirestore(username, updatedSessions);
+    if (!exercise) {
+      console.error('Selected exercise not found:', selectedExercise);
+      return;
     }
+
+    // Create or update current session
+    let updatedSessions = [...sessions];
+    if (!currentSession) {
+      const newSession = {
+        date: new Date().toISOString(),
+        name: `Session - ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`,
+        exercises: []
+      };
+      updatedSessions = [...sessions, newSession];
+    }
+
+    const targetSession = updatedSessions[updatedSessions.length - 1];
+    const newExercise = {
+      id: exercise.id,
+      name: exercise.name || 'Unnamed Exercise',
+      reps: exercise.type === 'cardio' ? 0 : 0,
+      laps: 0,
+      weight: exercise.type === 'cardio' ? 0 : (selectedWeight || 0),
+      duration: exercise.type === 'cardio' ? (selectedDuration || 0) : 0,
+      videoUrl: exercise.videoUrl || '',
+      minCalories: exercise.minCalories || 10,
+      type: exercise.type || 'strength', // Default to strength if undefined
+      met: exercise.met || (exercise.type === 'cardio' ? 3 : undefined),
+      sets: exercise.sets || 1
+    };
+
+    const updatedSession = {
+      ...targetSession,
+      exercises: [...targetSession.exercises, newExercise]
+    };
+    updatedSessions[updatedSessions.length - 1] = updatedSession;
+    setSessions(updatedSessions);
+    setShowDropdown(false);
+    setSelectedExercise('');
+    setSelectedWeight(0);
+    setSelectedDuration(0);
+    updateSessionInFirestore(username, updatedSessions).catch(error => {
+      console.error('Failed to update session:', error);
+      setSessions(sessions); // Revert on failure
+    });
   };
 
   const updateRepsLaps = (index, field, delta) => {
@@ -80,7 +84,10 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
+    updateSessionInFirestore(username, updatedSessions).catch(error => {
+      console.error('Failed to update reps/laps:', error);
+      setSessions(sessions); // Revert on failure
+    });
   };
 
   const updateDuration = (index, value) => {
@@ -91,7 +98,10 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
+    updateSessionInFirestore(username, updatedSessions).catch(error => {
+      console.error('Failed to update duration:', error);
+      setSessions(sessions); // Revert on failure
+    });
   };
 
   const updateWeight = (index, value) => {
@@ -102,7 +112,10 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
+    updateSessionInFirestore(username, updatedSessions).catch(error => {
+      console.error('Failed to update weight:', error);
+      setSessions(sessions); // Revert on failure
+    });
   };
 
   const removeExercise = (index) => {
@@ -113,7 +126,10 @@ function CurrentSession({ sessions, setSessions, exercises, user, updateSessionI
     const updatedSessions = [...sessions];
     updatedSessions[sessions.length - 1] = updatedSession;
     setSessions(updatedSessions);
-    updateSessionInFirestore(username, updatedSessions);
+    updateSessionInFirestore(username, updatedSessions).catch(error => {
+      console.error('Failed to remove exercise:', error);
+      setSessions(sessions); // Revert on failure
+    });
   };
 
   const canStartSession = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase/db';
-import { collection, getDocs, query, where, deleteDoc, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, deleteDoc, doc, updateDoc, getDoc, setDoc } from 'firebase/firestore'; // Added setDoc
 import { X, ChevronLeft } from 'react-feather';
 import './exerciseList.css';
 
@@ -15,10 +15,8 @@ function ExerciseList({ type }) {
     const fetchExercises = async () => {
       let q;
       if (type.toLowerCase() === 'cardio') {
-        // Filter by type for cardio exercises
         q = query(collection(db, 'exercises'), where('type', '==', 'cardio'));
       } else {
-        // Filter by muscle group for other categories (e.g., chest, legs)
         q = query(collection(db, 'exercises'), where('muscleGroup', 'array-contains', type.toLowerCase()));
       }
       const querySnapshot = await getDocs(q);
@@ -61,31 +59,35 @@ function ExerciseList({ type }) {
   const handleWeightChange = (exerciseId, value) => {
     setSessionData(prev => ({
       ...prev,
-      [exerciseId]: { ...prev[exerciseId], weight: Math.max(0, parseInt(value)) }
+      [exerciseId]: { ...prev[exerciseId], weight: Math.max(0, parseInt(value) || 0) }
     }));
   };
 
   const handleAddToNewSession = async () => {
     if (!user) return;
+    const username = user.displayName || user.email.split('@')[0];
     const newSession = {
       date: new Date().toISOString(),
+      name: `Session - ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`,
       exercises: Object.entries(sessionData).map(([id, data]) => {
         const exercise = exercises.find(e => e.id === id);
         return {
           id,
-          name: exercise.name,
+          name: exercise.name || 'Unnamed Exercise',
           reps: data.reps || (exercise.type === 'cardio' ? 0 : undefined),
           duration: data.duration || (exercise.type !== 'cardio' ? 0 : undefined),
           laps: data.laps || 0,
           weight: data.weight || (exercise.type === 'cardio' ? 0 : undefined),
-          videoUrl: exercise.videoUrl,
+          videoUrl: exercise.videoUrl || '',
           minCalories: exercise.minCalories || 10,
-          type: exercise.type
+          type: exercise.type || 'strength',
+          met: exercise.met || (exercise.type === 'cardio' ? 3 : undefined),
+          sets: exercise.sets || 1
         };
       }).filter(e => (e.type === 'cardio' ? e.duration > 0 : e.reps > 0 && e.weight > 0) || e.laps > 0)
     };
     const updatedSessions = [...sessions, newSession];
-    await updateDoc(doc(db, 'users', user.displayName || user.email.split('@')[0]), { sessions: updatedSessions });
+    await updateDoc(doc(db, 'users', username), { sessions: updatedSessions });
     setSessions(updatedSessions);
     setSessionData({});
     alert('Added to new session!');
@@ -93,6 +95,7 @@ function ExerciseList({ type }) {
 
   const handleAddToExistingSession = async () => {
     if (!user || !selectedSession) return;
+    const username = user.displayName || user.email.split('@')[0];
     const sessionIndex = sessions.findIndex(s => s.date === selectedSession);
     if (sessionIndex === -1) return;
     const updatedSession = {
@@ -103,29 +106,75 @@ function ExerciseList({ type }) {
           const exercise = exercises.find(e => e.id === id);
           return {
             id,
-            name: exercise.name,
+            name: exercise.name || 'Unnamed Exercise',
             reps: data.reps || (exercise.type === 'cardio' ? 0 : undefined),
             duration: data.duration || (exercise.type !== 'cardio' ? 0 : undefined),
             laps: data.laps || 0,
             weight: data.weight || (exercise.type === 'cardio' ? 0 : undefined),
-            videoUrl: exercise.videoUrl,
+            videoUrl: exercise.videoUrl || '',
             minCalories: exercise.minCalories || 10,
-            type: exercise.type
+            type: exercise.type || 'strength',
+            met: exercise.met || (exercise.type === 'cardio' ? 3 : undefined),
+            sets: exercise.sets || 1
           };
         }).filter(e => (e.type === 'cardio' ? e.duration > 0 : e.reps > 0 && e.weight > 0) || e.laps > 0)
       ]
     };
     const updatedSessions = sessions.map((s, i) => i === sessionIndex ? updatedSession : s);
-    await updateDoc(doc(db, 'users', user.displayName || user.email.split('@')[0]), { sessions: updatedSessions });
+    await updateDoc(doc(db, 'users', username), { sessions: updatedSessions });
     setSessions(updatedSessions);
     setSessionData({});
     alert('Added to existing session!');
   };
 
   const handleDelete = async (exerciseId) => {
-    if (window.confirm(`Are you sure you want to delete ${exercises.find(e => e.id === exerciseId)?.name}?`)) {
+    if (!user || !window.confirm(`Are you sure you want to delete ${exercises.find(e => e.id === exerciseId)?.name}?`)) return;
+    const username = user.displayName || user.email.split('@')[0];
+    const userDocRef = doc(db, 'users', username);
+
+    try {
+      console.log('Attempting to delete exercise with ID:', exerciseId);
+      // Delete the exercise from the exercises collection
       await deleteDoc(doc(db, 'exercises', exerciseId));
-      setExercises(exercises.filter(exercise => exercise.id !== exerciseId));
+      console.log('Exercise deleted from exercises collection');
+
+      // Fetch the latest user document to ensure we have the current sessions
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const originalSessions = userData.sessions || [];
+        console.log('Original sessions count:', originalSessions.length);
+
+        // Update sessions to remove the deleted exercise
+        const updatedSessions = originalSessions.map(session => ({
+          ...session,
+          exercises: session.exercises.filter(e => e.id !== exerciseId)
+        }));
+        console.log('Updated sessions count:', updatedSessions.length);
+        console.log('Exercises removed for ID:', exerciseId);
+
+        // Update the users document with the new sessions
+        await updateDoc(userDocRef, { sessions: updatedSessions });
+        console.log('Users document updated with new sessions');
+
+        // Re-fetch sessions to sync local state
+        const refreshedDocSnap = await getDoc(userDocRef);
+        const refreshedSessions = refreshedDocSnap.exists() ? refreshedDocSnap.data().sessions || [] : [];
+        setSessions(refreshedSessions);
+        console.log('Local sessions updated, new count:', refreshedSessions.length);
+
+        // Update local exercises list
+        setExercises(exercises.filter(exercise => exercise.id !== exerciseId));
+        console.log('Local exercises updated');
+
+        alert('Exercise deleted successfully!');
+      } else {
+        console.error('User document not found');
+        alert('Failed to find user data.');
+      }
+    } catch (error) {
+      console.error('Failed to delete exercise:', error);
+      alert('Failed to delete exercise. Check console for details.');
     }
   };
 
@@ -145,7 +194,7 @@ function ExerciseList({ type }) {
           <select value={selectedSession} onChange={(e) => setSelectedSession(e.target.value)}>
             <option value="">Select Session</option>
             {sessions.map((session, index) => (
-              <option key={index} value={session.date}>{new Date(session.date).toLocaleDateString()}</option>
+              <option key={index} value={session.date}>{session.name || new Date(session.date).toLocaleDateString()}</option>
             ))}
           </select>
           <button onClick={handleAddToExistingSession} disabled={!selectedSession}>Add to Existing Session</button>
